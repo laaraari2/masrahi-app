@@ -560,106 +560,118 @@ export default function VisitorSite() {
         </div>
       </footer>
 
-      {/* ========== MODAL: بطاقة المؤطر مصطفى لعرعري ========== */}
+      {/* ========== MODAL: بطاقة المؤطر مصطفى لعرعري (تصميم احترافي مُمَركَز) ========== */}
       {showBioModal && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/65 backdrop-blur-sm animate-fadeIn"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md animate-fadeIn"
           onClick={() => setShowBioModal(false)}
         >
           <div
-            className="bg-white rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl border border-gray-100 relative"
+            className="bg-white rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl border-2 border-amber-400/30 relative text-center"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Header Banner */}
-            <div className="relative h-28 bg-gradient-to-r from-primary via-primary-dark to-[#4a0e0e] flex items-end px-6">
+            {/* Top Theatrical Velvet Banner */}
+            <div className="relative h-32 bg-gradient-to-b from-[#2d0707] via-primary-dark to-primary flex items-center justify-between px-5">
               <button
                 onClick={() => setShowBioModal(false)}
-                className="absolute top-4 left-4 w-9 h-9 rounded-full bg-black/30 hover:bg-black/60 text-white flex items-center justify-center transition-all cursor-pointer shadow-md"
+                className="w-9 h-9 rounded-full bg-black/40 hover:bg-black/70 text-white flex items-center justify-center transition-all cursor-pointer shadow-lg"
                 title="إغلاق النافذة"
               >
                 <X size={20} />
               </button>
-              <div className="absolute top-4 right-5 text-amber-200/90 text-xs font-bold flex items-center gap-1.5 bg-black/20 px-3 py-1 rounded-full backdrop-blur-xs">
-                <span>🎭</span> بطاقة المؤطر المشرف
+
+              <div className="inline-flex items-center gap-1.5 bg-amber-400/20 border border-amber-300/40 text-amber-300 text-xs font-black px-3.5 py-1.5 rounded-full shadow-inner">
+                <span>🎭</span>
+                <span>البطاقة التعريفية للمؤطر</span>
               </div>
             </div>
 
-            {/* Avatar and Main Info */}
-            <div className="px-6 pt-0 pb-6 relative">
-              <div className="flex flex-col sm:flex-row items-center sm:items-end gap-4 -mt-14 mb-4 text-center sm:text-right">
-                <img
-                  src="/laaraari (2).jpeg"
-                  alt="الأستاذ مصطفى لعرعري"
-                  className="w-24 h-24 rounded-2xl object-cover border-4 border-white shadow-xl bg-white shrink-0"
-                />
-                <div className="flex-1 pb-1">
-                  <h3 className="text-xl font-black text-gray-900 leading-tight">
-                    الأستاذ مصطفى لعرعري
-                  </h3>
-                  <p className="text-sm font-bold text-primary mt-0.5">
-                    مؤطر ورشة المسرح المدرسي ومنشط تربوي
-                  </p>
-                  <p className="text-xs text-gray-500 mt-0.5">
-                    {settings?.schoolName || 'مؤسسة العمران للتعليم الخصوصي'}
-                  </p>
+            {/* Profile Content Body */}
+            <div className="px-6 pb-6 pt-0 relative">
+              {/* Centered Avatar with Golden Rings */}
+              <div className="flex justify-center -mt-16 mb-3">
+                <div className="relative inline-block">
+                  <img
+                    src="/laaraari (2).jpeg"
+                    alt="الأستاذ مصطفى لعرعري"
+                    className="w-28 h-28 md:w-32 md:h-32 rounded-full object-cover border-4 border-amber-400 shadow-2xl ring-4 ring-amber-400/20 bg-white"
+                  />
+                  <div
+                    className="absolute bottom-1 right-2 w-6 h-6 bg-emerald-500 border-2 border-white rounded-full flex items-center justify-center text-white text-[11px] shadow-md"
+                    title="مؤطر معتمد"
+                  >
+                    ✓
+                  </div>
                 </div>
               </div>
 
-              {/* Bio Paragraph */}
-              <div className="bg-amber-50/70 border border-amber-200/70 rounded-2xl p-4 text-sm leading-relaxed text-gray-700 text-justify relative shadow-xs">
-                <div className="text-amber-900 font-bold text-xs mb-1.5 flex items-center gap-1.5">
-                  <span>✨</span> كلمة ورسالة المؤطر:
+              {/* Centered Name with High Contrast & Royal Styling */}
+              <div className="space-y-1 mb-4">
+                <h3 className="text-2xl md:text-3xl font-black text-[#7a1212] drop-shadow-xs tracking-tight">
+                  الأستاذ مصطفى لعرعري
+                </h3>
+                <div className="inline-block bg-primary/10 text-primary border border-primary/20 text-xs md:text-sm font-black px-3.5 py-1 rounded-full">
+                  🎭 مؤطر ورشة المسرح المدرسي ومنشط تربوي
                 </div>
-                «نؤمن بأن المسرح المدرسي ليس مجرد خشبة وأداء، بل هو فضاء تربوي متكامل ومشتل لبناء الشخصية المتوازنة وصقل المواهب الواعدة. نسعى من خلال هذه الورشة إلى تمكين المتعلمين والمتعلمات من كسر حاجز الخوف، وتنمية مهارات التعبير الجسدي والصوتي، وترسيخ قيم التعاون والتسامح والعمل الجماعي في بيئة محفزة تجمع بين التعلم والمتعة.»
+                <p className="text-xs text-gray-500 font-semibold block pt-0.5">
+                  {settings?.schoolName || 'مؤسسة العمران للتعليم الخصوصي'}
+                </p>
               </div>
 
-              {/* Skills / Badges */}
-              <div className="mt-4">
-                <div className="text-xs font-bold text-gray-500 mb-2">مجالات التأطير والاشتغال:</div>
-                <div className="flex flex-wrap gap-1.5">
-                  <span className="text-xs bg-primary/10 text-primary font-bold px-2.5 py-1 rounded-lg">
+              {/* Centered Theatrical Quote / Bio */}
+              <div className="bg-gradient-to-b from-amber-50/90 to-orange-50/50 border border-amber-200/90 rounded-2xl p-4 text-xs md:text-sm leading-relaxed text-gray-800 text-center shadow-xs mb-4">
+                <div className="text-amber-900 font-black text-xs mb-1.5 flex items-center justify-center gap-1.5">
+                  <span>✨</span>
+                  <span>رسالة وكلمة المؤطر</span>
+                  <span>✨</span>
+                </div>
+                <p className="text-gray-700 font-medium">
+                  «نؤمن بأن المسرح المدرسي ليس مجرد خشبة وأداء، بل هو فضاء تربوي متكامل ومشتل لبناء الشخصية المتوازنة وصقل المواهب الواعدة. نسعى من خلال هذه الورشة إلى تمكين المتعلمين من كسر حاجز الخوف، وتنمية مهارات التعبير الجسدي والصوتي، وترسيخ قيم التعاون والتسامح والعمل الجماعي.»
+                </p>
+              </div>
+
+              {/* Centered Badges */}
+              <div className="mb-5">
+                <div className="text-[11px] font-bold text-gray-500 mb-2 uppercase tracking-wider">
+                  مجالات التأطير والتنشيط
+                </div>
+                <div className="flex flex-wrap items-center justify-center gap-1.5">
+                  <span className="text-xs bg-primary/10 text-primary border border-primary/20 font-bold px-3 py-1 rounded-full">
                     🎭 التعبير المسرحي والإلقاء
                   </span>
-                  <span className="text-xs bg-amber-100 text-amber-800 font-bold px-2.5 py-1 rounded-lg">
-                    🤝 التنشيط التربوي والثقة بالنفس
+                  <span className="text-xs bg-amber-100 text-amber-900 border border-amber-300 font-bold px-3 py-1 rounded-full">
+                    🤝 التنشيط وبناء الثقة
                   </span>
-                  <span className="text-xs bg-emerald-100 text-emerald-800 font-bold px-2.5 py-1 rounded-lg">
+                  <span className="text-xs bg-emerald-100 text-emerald-900 border border-emerald-300 font-bold px-3 py-1 rounded-full">
                     🎬 الإخراج والعروض المدرسية
                   </span>
-                  <span className="text-xs bg-purple-100 text-purple-800 font-bold px-2.5 py-1 rounded-lg">
-                    🌟 صقل المواهب والعمل الجماعي
+                  <span className="text-xs bg-purple-100 text-purple-900 border border-purple-300 font-bold px-3 py-1 rounded-full">
+                    🌟 صقل المواهب الواعدة
                   </span>
                 </div>
               </div>
 
-              {/* Contact Links */}
-              <div className="mt-5 pt-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-3">
-                <div className="flex items-center gap-2 w-full sm:w-auto flex-wrap">
-                  <a
-                    href="mailto:laaraari2@gmail.com"
-                    className="inline-flex items-center justify-center gap-1.5 bg-gray-100 hover:bg-primary hover:text-white text-gray-700 text-xs font-bold px-3.5 py-2.5 rounded-xl transition-all"
-                  >
-                    <Mail size={15} />
-                    <span>laaraari2@gmail.com</span>
-                  </a>
-                  <a
-                    href="https://www.facebook.com/people/Laaraari-Abo-Ilyass/pfbid02Ycwc4wqnmSoEWaWLDDPT6jR5s5veJN87Hhrq7yj5kP9vn1X3dnucS8hdP6SZDRJFl/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-1.5 bg-[#1877F2]/10 hover:bg-[#1877F2] text-[#1877F2] hover:text-white text-xs font-bold px-3.5 py-2.5 rounded-xl transition-all"
-                  >
-                    <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                    </svg>
-                    <span>فيسبوك</span>
-                  </a>
-                </div>
-                <button
-                  onClick={() => setShowBioModal(false)}
-                  className="w-full sm:w-auto text-xs font-bold text-gray-500 hover:text-gray-800 px-3 py-2 cursor-pointer transition-colors"
+              {/* Centered Contact Buttons */}
+              <div className="pt-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-center gap-2.5">
+                <a
+                  href="mailto:laaraari2@gmail.com"
+                  className="w-full sm:w-auto flex-1 inline-flex items-center justify-center gap-2 bg-gradient-to-r from-primary to-primary-dark hover:from-primary-dark hover:to-primary text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-md transition-all hover:scale-[1.02]"
                 >
-                  إغلاق
-                </button>
+                  <Mail size={16} />
+                  <span>laaraari2@gmail.com</span>
+                </a>
+
+                <a
+                  href="https://www.facebook.com/people/Laaraari-Abo-Ilyass/pfbid02Ycwc4wqnmSoEWaWLDDPT6jR5s5veJN87Hhrq7yj5kP9vn1X3dnucS8hdP6SZDRJFl/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#1877F2] hover:bg-[#0d65d9] text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow-md transition-all hover:scale-[1.02]"
+                >
+                  <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                  </svg>
+                  <span>حساب فيسبوك</span>
+                </a>
               </div>
             </div>
           </div>
