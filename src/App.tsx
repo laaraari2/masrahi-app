@@ -23,6 +23,8 @@ import VisitorSite from './pages/VisitorSite';
 import TheatricalScriptsPage from './pages/TheatricalScriptsPage';
 import WeeklyReportsPage from './pages/WeeklyReportsPage';
 
+import { syncService } from './services/syncService';
+
 import { db } from './db/database';
 
 export default function App() {
@@ -48,10 +50,18 @@ export default function App() {
       await seedDatabase();
       await seedScripts();
       await initializeWorkshopProgram();
+
+      // Automatically pull latest sessions and reports from Supabase
+      try {
+        await syncService.pullAllFromCloud();
+      } catch (e) {
+        console.warn('Initial cloud sync skipped or offline:', e);
+      }
     };
     
     initDB().catch(console.error);
   }, []);
+
 
   return (
     <BrowserRouter>

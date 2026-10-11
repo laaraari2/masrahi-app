@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '../db/database';
@@ -23,7 +23,10 @@ import {
   List,
   Users,
   Lock,
+  RefreshCw,
+  Cloud,
 } from 'lucide-react';
+
 import Button from '../components/ui/Button';
 import TextArea from '../components/ui/TextArea';
 import MultiSelect from '../components/ui/MultiSelect';
@@ -59,6 +62,30 @@ export default function WeeklyReportsPage() {
   });
   const [addSaving, setAddSaving] = useState(false);
   const [addSaved, setAddSaved] = useState(false);
+
+  // Cloud Sync state
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [syncStatusText, setSyncStatusText] = useState<string | null>(null);
+
+  // Pull latest updates from Supabase automatically on page load
+  useEffect(() => {
+    syncService.pullAllFromCloud().catch(err => console.warn('Auto-pull failed:', err));
+  }, []);
+
+  const handleManualSync = async () => {
+    setIsSyncing(true);
+    setSyncStatusText(null);
+    const res = await syncService.pullAllFromCloud();
+    setIsSyncing(false);
+    if (res.success) {
+      setSyncStatusText('تم التحديث ✅');
+      setTimeout(() => setSyncStatusText(null), 2500);
+    } else {
+      setSyncStatusText('تعذر الاتصال ⚠️');
+      setTimeout(() => setSyncStatusText(null), 2500);
+    }
+  };
+
 
   // ── Tab 2: All sessions by class ──
   const [pickedClassId, setPickedClassId] = useState<string>('');
@@ -302,14 +329,31 @@ export default function WeeklyReportsPage() {
               </p>
             </div>
           </div>
-          <button
-            onClick={() => window.print()}
-            className="inline-flex items-center gap-1.5 bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 px-3.5 py-2 rounded-xl text-xs font-semibold shadow-sm transition-colors"
-          >
-            <Printer size={16} />
-            <span>طباعة</span>
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleManualSync}
+              disabled={isSyncing}
+              className={`inline-flex items-center gap-1.5 border px-3.5 py-2 rounded-xl text-xs font-semibold shadow-sm transition-all ${
+                syncStatusText
+                  ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
+                  : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'
+              }`}
+              title="تحديث ومزامنة البيانات من السحابة"
+            >
+              <RefreshCw size={14} className={isSyncing ? 'animate-spin text-primary' : 'text-gray-500'} />
+              <span>{syncStatusText || (isSyncing ? 'جاري المزامنة...' : 'مزامنة سحابية ☁️')}</span>
+            </button>
+
+            <button
+              onClick={() => window.print()}
+              className="inline-flex items-center gap-1.5 bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 px-3.5 py-2 rounded-xl text-xs font-semibold shadow-sm transition-colors"
+            >
+              <Printer size={16} />
+              <span>طباعة</span>
+            </button>
+          </div>
         </div>
+
 
         {/* Tabs */}
         <div className="max-w-6xl mx-auto px-4 flex border-t border-gray-100 overflow-x-auto">
