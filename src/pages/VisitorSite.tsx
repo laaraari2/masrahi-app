@@ -109,7 +109,11 @@ export default function VisitorSite() {
       <nav className="bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-gray-100 no-print">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <span className="text-3xl">🎭</span>
+            <img
+              src="/laaraari (2).jpeg"
+              alt="صورة المشرف"
+              className="w-10 h-10 rounded-full object-cover border-2 border-primary/30 shadow-sm"
+            />
             <div>
               <div className="font-bold text-primary text-lg leading-tight">ورشة المسرح المدرسي</div>
               <div className="text-xs text-gray-500">{settings?.schoolName || 'مؤسسة العمران'}</div>
