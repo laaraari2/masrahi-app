@@ -172,10 +172,10 @@ export default function VisitorSite() {
           <h1 className="text-4xl md:text-6xl font-black mb-4 leading-tight">
             ورشة المسرح المدرسي
           </h1>
-          <p className="text-xl md:text-2xl text-white/80 mb-2 font-light">
-            {settings?.schoolName || 'مجموعة مدارس العمران'}
+          <p className="text-xl md:text-2xl text-amber-300 mb-2 font-medium">
+            تأطير: الأستاذ مصطفى لعرعري
           </p>
-          <p className="text-white/60 text-base md:text-lg mb-10 max-w-2xl mx-auto">
+          <p className="text-white/70 text-base md:text-lg mb-10 max-w-2xl mx-auto">
             فضاء للإبداع والتعبير الفني — نُنمّي مواهب التلاميذ من خلال فن المسرح والتشخيص والإلقاء
           </p>
 
@@ -515,7 +515,7 @@ export default function VisitorSite() {
                 <span className="text-3xl">🎭</span>
                 <div>
                   <div className="font-bold text-lg">ورشة المسرح المدرسي</div>
-                  <div className="text-sm text-gray-400">{settings?.schoolName || 'مؤسسة العمران'}</div>
+                  <div className="text-sm text-gray-400">تأطير: الأستاذ مصطفى لعرعري</div>
                 </div>
               </div>
               <p className="text-sm text-gray-400 leading-relaxed">

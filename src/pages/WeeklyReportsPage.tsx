@@ -331,7 +331,7 @@ export default function WeeklyReportsPage() {
                 <h1 className="text-xl md:text-2xl font-black text-text">تقارير الحصص الأسبوعية</h1>
               </div>
               <p className="text-xs text-text-muted mt-0.5">
-                سجل إنجازات وتتبع ورشات المسرح المدرسي — {settings?.schoolName || 'مؤسسة العمران'}
+                سجل إنجازات وتتبع ورشات المسرح المدرسي — تأطير: الأستاذ مصطفى لعرعري
               </p>
             </div>
           </div>
@@ -407,7 +407,7 @@ export default function WeeklyReportsPage() {
         <div className="hidden print:block text-center border-b pb-4 mb-6">
           <h2 className="text-2xl font-black">المملكة المغربية — ورشة المسرح المدرسي</h2>
           <p className="text-sm text-gray-600 mt-1">
-            سجل تقارير ويوميات الحصص الأسبوعية | {settings?.schoolName || 'مؤسسة العمران'}
+            سجل تقارير ويوميات الحصص الأسبوعية
           </p>
           <p className="text-xs text-gray-500 mt-0.5">
             الأستاذ المشرف: {settings?.teacherName || 'مصطفى لعرعري'} — الموسم الدراسي 2026/2027

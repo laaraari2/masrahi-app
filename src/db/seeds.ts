@@ -30,7 +30,7 @@ export async function seedDatabase(): Promise<void> {
   // 4. الإعدادات
   await db.settings.add({
     teacherName: 'مصطفى لعرعري',
-    schoolName: 'مؤسسة العمران (AL OUMRANE)',
+    schoolName: '',
     academicYearStart: ACADEMIC_YEAR.start,
     academicYearEnd: ACADEMIC_YEAR.end,
     programVersion: undefined,
