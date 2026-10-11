@@ -38,8 +38,13 @@ import { ACADEMIC_YEAR } from '../constants/holidays';
 
 export default function WeeklyReportsPage() {
   const navigate = useNavigate();
-  const classes = useLiveQuery(() => db.classes.orderBy('order').toArray()) ?? [];
+  const classes = useLiveQuery(async () => {
+    const list = await db.classes.toArray();
+    return list.sort((a, b) => (a.order || 0) - (b.order || 0));
+  }) ?? [];
+
   const settings = useLiveQuery(() => db.settings.toCollection().first());
+
 
   const todayStr = new Date().toISOString().split('T')[0];
 
@@ -447,12 +452,23 @@ export default function WeeklyReportsPage() {
                   </button>
                 ))}
                 {classes.length === 0 && (
-                  <p className="text-sm text-text-muted col-span-full py-4 text-center">
-                    لا توجد أقسام — أضفها من لوحة الأدمين أولاً
-                  </p>
+                  <div className="col-span-full py-6 text-center space-y-3">
+                    <p className="text-sm text-text-muted">
+                      لم يتم العثور على الأقسام محلياً بعد.
+                    </p>
+                    <button
+                      onClick={handleManualSync}
+                      disabled={isSyncing}
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-violet-600 text-white rounded-xl text-xs font-bold shadow-sm hover:bg-violet-700 transition-all"
+                    >
+                      <RefreshCw size={14} className={isSyncing ? 'animate-spin' : ''} />
+                      <span>{isSyncing ? 'جاري جلب الأقسام من السحابة...' : '🔄 جلب الأقسام من السحابة الآن'}</span>
+                    </button>
+                  </div>
                 )}
               </div>
             </div>
+
 
             {/* ── Month navigator (always visible once class picked or not) ── */}
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">

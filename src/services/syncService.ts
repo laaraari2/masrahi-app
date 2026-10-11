@@ -131,6 +131,7 @@ export const syncService = {
           duration: c.duration,
           order: c.order_num || 0,
         }));
+        await db.classes.clear();
         await db.classes.bulkPut(formattedClasses);
       }
 
@@ -157,8 +158,10 @@ export const syncService = {
           isHoliday: s.is_holiday,
           holidayName: s.holiday_name,
         }));
+        await db.sessions.clear();
         await db.sessions.bulkPut(formattedSessions);
       }
+
 
       if (cloudScripts && cloudScripts.length > 0) {
         const formattedScripts: TheaterScript[] = cloudScripts.map(sc => ({
