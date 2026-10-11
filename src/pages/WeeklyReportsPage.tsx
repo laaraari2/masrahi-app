@@ -44,7 +44,8 @@ export default function WeeklyReportsPage() {
   const todayStr = new Date().toISOString().split('T')[0];
 
   // ── Tabs ──
-  const [activeTab, setActiveTab] = useState<'daily-log' | 'all-sessions' | 'all-reports'>('daily-log');
+  const [activeTab, setActiveTab] = useState<'all-reports' | 'all-sessions'>('all-reports');
+
 
   // ── Tab 1: Daily log ──
   const [selectedDate, setSelectedDate] = useState<string>(todayStr);
@@ -356,29 +357,30 @@ export default function WeeklyReportsPage() {
 
 
         {/* Tabs */}
+        {/* Tabs */}
         <div className="max-w-6xl mx-auto px-4 flex border-t border-gray-100 overflow-x-auto">
-          {/* Tab 1 */}
+          {/* Tab 1: سجل التقارير (الافتراضي) */}
           <button
-            onClick={() => setActiveTab('daily-log')}
-            className={`flex items-center gap-2 px-5 py-3 font-bold text-sm transition-all border-b-2 whitespace-nowrap ${
-              activeTab === 'daily-log'
-                ? 'border-primary text-primary bg-primary/5'
+            onClick={() => setActiveTab('all-reports')}
+            className={`flex items-center gap-2 px-6 py-3.5 font-bold text-sm transition-all border-b-2 whitespace-nowrap ${
+              activeTab === 'all-reports'
+                ? 'border-emerald-600 text-emerald-700 bg-emerald-50/60'
                 : 'border-transparent text-gray-500 hover:text-gray-900'
             }`}
           >
-            <CalendarDays size={17} />
-            <span>يَوْمِيَّاتُ الحِصَصِ</span>
-            <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-bold">
-              {dailySessions.length}
+            <CheckSquare size={17} />
+            <span>سِجِلُّ التَّقَارِيرِ</span>
+            <span className="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold">
+              {allCompletedSessions.length}
             </span>
           </button>
 
-          {/* Tab 2 — NEW */}
+          {/* Tab 2: جميع الحصص (تعبئة التقارير) */}
           <button
             onClick={() => setActiveTab('all-sessions')}
-            className={`flex items-center gap-2 px-5 py-3 font-bold text-sm transition-all border-b-2 whitespace-nowrap ${
+            className={`flex items-center gap-2 px-6 py-3.5 font-bold text-sm transition-all border-b-2 whitespace-nowrap ${
               activeTab === 'all-sessions'
-                ? 'border-violet-600 text-violet-600 bg-violet-50'
+                ? 'border-violet-600 text-violet-700 bg-violet-50/60'
                 : 'border-transparent text-gray-500 hover:text-gray-900'
             }`}
           >
@@ -390,23 +392,8 @@ export default function WeeklyReportsPage() {
               </span>
             )}
           </button>
-
-          {/* Tab 3 */}
-          <button
-            onClick={() => setActiveTab('all-reports')}
-            className={`flex items-center gap-2 px-5 py-3 font-bold text-sm transition-all border-b-2 whitespace-nowrap ${
-              activeTab === 'all-reports'
-                ? 'border-emerald-600 text-emerald-600 bg-emerald-50'
-                : 'border-transparent text-gray-500 hover:text-gray-900'
-            }`}
-          >
-            <CheckSquare size={17} />
-            <span>سِجِلُّ التَّقَارِيرِ</span>
-            <span className="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold">
-              {allCompletedSessions.length}
-            </span>
-          </button>
         </div>
+
       </div>
 
       <div className="max-w-6xl mx-auto px-4 pt-6 space-y-6">
@@ -422,175 +409,7 @@ export default function WeeklyReportsPage() {
           </p>
         </div>
 
-        {/* ══════════════════════════════════════════
-            TAB 1 — DAILY LOG
-        ══════════════════════════════════════════ */}
-        {activeTab === 'daily-log' && (
-          <div className="space-y-5">
-            {/* Date picker */}
-            <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 no-print">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">📅</div>
-                <div>
-                  <h3 className="font-bold text-text text-sm">تاريخ اليومية:</h3>
-                  <p className="text-xs text-text-muted">
-                    {selectedDate === todayStr ? 'محدد تلقائياً على اليوم الحالي' : 'يوم سابق أو قادم'}
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <input
-                  type="date"
-                  value={selectedDate}
-                  onChange={e => { setSelectedDate(e.target.value); setAddDate(e.target.value); }}
-                  className="bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs font-semibold text-text focus:outline-none focus:border-primary shadow-sm"
-                />
-                {selectedDate !== todayStr && (
-                  <button
-                    onClick={() => setSelectedDate(todayStr)}
-                    className="text-xs bg-primary/10 text-primary hover:bg-primary/20 px-3 py-2 rounded-xl font-bold"
-                  >
-                    اليوم
-                  </button>
-                )}
-              </div>
-            </div>
 
-            {/* Manual add */}
-            <div className="no-print">
-              <button
-                onClick={() => { setShowAddForm(v => !v); setAddDate(selectedDate); }}
-                className="inline-flex items-center gap-2 bg-primary text-white hover:bg-primary/90 px-4 py-2.5 rounded-xl text-sm font-bold shadow-sm transition-colors"
-              >
-                {showAddForm ? <X size={17} /> : <Plus size={17} />}
-                {showAddForm ? 'إغلاق النموذج' : '➕ إضافة تقرير حصة يدوياً'}
-              </button>
-              <p className="text-[11px] text-text-muted mt-1 pr-1">
-                أضف تقرير لأي حصة (مثلاً 1–8 أكتوبر) حتى لو لم تكن مبرمجة
-              </p>
-            </div>
-
-            {showAddForm && (
-              <div className="bg-white rounded-2xl border border-primary/30 shadow-md p-5 space-y-4 no-print">
-                <div className="flex items-center justify-between mb-1">
-                  <h3 className="font-black text-primary text-base flex items-center gap-2">
-                    <Plus size={18} /> إضافة تقرير حصة يدوياً
-                  </h3>
-                  <button onClick={() => setShowAddForm(false)} className="p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50">
-                    <X size={18} />
-                  </button>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  <div className="flex flex-col gap-1">
-                    <label className="text-xs font-bold text-text">القسم *</label>
-                    <select value={addClassId} onChange={e => setAddClassId(e.target.value)}
-                      className="bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs font-semibold text-text focus:outline-none focus:border-primary">
-                      <option value="">— اختر القسم —</option>
-                      {classes.map(c => (
-                        <option key={c.id} value={String(c.id)}>{c.name} ({c.level})</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <label className="text-xs font-bold text-text">التاريخ *</label>
-                    <input type="date" value={addDate} onChange={e => setAddDate(e.target.value)}
-                      className="bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs font-semibold text-text focus:outline-none focus:border-primary" />
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <label className="text-xs font-bold text-text">وقت البداية</label>
-                    <input type="time" value={addTime} onChange={e => setAddTime(e.target.value)}
-                      className="bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs font-semibold text-text focus:outline-none focus:border-primary" />
-                  </div>
-                </div>
-                <TextArea label="موضوع الحصة" value={addForm.topic || ''} onChange={v => setAddForm({ ...addForm, topic: v })} rows={1} placeholder="مثال: التدريب على مخارج الحروف..." />
-                <TextArea label="أهداف الحصة" value={addForm.objectives || ''} onChange={v => setAddForm({ ...addForm, objectives: v })} rows={2} placeholder="الأهداف التربوية والفنية..." />
-                <TextArea label="سير الحصة والأنشطة" value={addForm.activities || ''} onChange={v => setAddForm({ ...addForm, activities: v })} rows={3} placeholder="التمارين والإلقاء وسير الأنشطة..." />
-                <MultiSelect
-                  label="التقنيات المسرحية"
-                  options={THEATER_TECHNIQUES.map(t => ({ value: t.id, label: t.label, icon: t.icon }))}
-                  selectedValues={(addForm.techniques as string[]) || []}
-                  onChange={v => setAddForm({ ...addForm, techniques: v })}
-                />
-                <TextArea label="ملاحظات الأستاذ" value={addForm.teacherNotes || ''} onChange={v => setAddForm({ ...addForm, teacherNotes: v })} rows={2} placeholder="ملاحظات حول تجاوب التلاميذ..." />
-                <div className="flex justify-end pt-1">
-                  <button
-                    disabled={!addClassId || !addDate || addSaving}
-                    onClick={handleSaveManualReport}
-                    className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold shadow-sm transition-all ${
-                      addSaved ? 'bg-emerald-500 text-white'
-                      : !addClassId || !addDate ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                      : 'bg-primary text-white hover:bg-primary/90'
-                    }`}
-                  >
-                    {addSaved ? <><Check size={17} />تم الحفظ!</> : <><Save size={17} />{addSaving ? 'جاري الحفظ...' : 'حفظ التقرير'}</>}
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* Day sessions */}
-            {dailySessions.length === 0 ? (
-              <div className="bg-white rounded-2xl p-10 text-center border border-gray-100 shadow-sm">
-                <span className="text-5xl block mb-3">☕</span>
-                <h3 className="font-bold text-text text-lg mb-1">لا توجد حصص مبرمجة في {selectedDate}</h3>
-                <p className="text-xs text-text-muted max-w-sm mx-auto">يمكنك إضافة تقرير يدوياً أعلاه.</p>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {dailySessions.map(session => {
-                  const isEditing = editingSessionId === session.id;
-                  const isCompleted = session.status === 'completed';
-                  return (
-                    <div key={session.id} className={`bg-white rounded-2xl border transition-all overflow-hidden ${isEditing ? 'border-primary shadow-lg ring-1 ring-primary/20' : 'border-gray-100 shadow-sm hover:shadow-md'}`}>
-                      <div onClick={() => handleStartEdit(session)} className="p-4 md:p-5 flex items-center justify-between gap-4 cursor-pointer select-none">
-                        <div className="flex items-center gap-3.5 min-w-0">
-                          <div className={`w-11 h-11 rounded-xl flex items-center justify-center font-black text-sm shrink-0 ${isCompleted ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}`}>
-                            {getClassName(session.classId)}
-                          </div>
-                          <div className="min-w-0">
-                            <div className="flex items-center gap-2 flex-wrap">
-                              <h3 className="font-bold text-base text-text truncate">{session.topic || 'حصة تدريبية مسرحية'}</h3>
-                              <span className={`inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full font-bold ${isCompleted ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'}`}>
-                                {isCompleted ? <><CheckCircle2 size={11} />منجزة</> : <><Clock size={11} />في الانتظار</>}
-                              </span>
-                            </div>
-                            <div className="flex items-center gap-2 text-xs text-text-muted mt-1">
-                              <span>{getClassLevel(session.classId)}</span>
-                              <span>•</span>
-                              <span className="flex items-center gap-1"><Clock size={12} />{session.startTime}</span>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="p-1.5 rounded-lg bg-gray-50 text-gray-500">
-                          {isEditing ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
-                        </div>
-                      </div>
-                      {isEditing && (
-                        <div className="p-5 border-t border-gray-100 bg-gray-50/50 space-y-3.5">
-                          <TextArea label="موضوع الحصة" value={form.topic || ''} onChange={v => setForm({ ...form, topic: v })} rows={1} placeholder="..." />
-                          <TextArea label="أهداف الحصة" value={form.objectives || ''} onChange={v => setForm({ ...form, objectives: v })} rows={2} placeholder="..." />
-                          <TextArea label="سير الحصة والأنشطة" value={form.activities || ''} onChange={v => setForm({ ...form, activities: v })} rows={3} placeholder="..." />
-                          <MultiSelect label="التقنيات المسرحية"
-                            options={THEATER_TECHNIQUES.map(t => ({ value: t.id, label: t.label, icon: t.icon }))}
-                            selectedValues={(form.techniques as string[]) || []}
-                            onChange={v => setForm({ ...form, techniques: v })}
-                          />
-                          <TextArea label="ملاحظات الأستاذ" value={form.teacherNotes || ''} onChange={v => setForm({ ...form, teacherNotes: v })} rows={2} placeholder="..." />
-                          <div className="flex justify-end pt-2">
-                            <Button onClick={() => handleSaveDailySession(session.id!)}
-                              icon={savedSessionId === session.id ? <Check size={18} /> : <Save size={18} />}>
-                              {savedSessionId === session.id ? 'تم الحفظ بنجاح!' : 'حفظ تقرير الحصة'}
-                            </Button>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-        )}
 
         {/* ══════════════════════════════════════════
             TAB 2 — ALL SESSIONS BY CLASS
