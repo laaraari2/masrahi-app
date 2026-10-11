@@ -6,7 +6,15 @@ import { DAY_NAMES } from '../types';
 import type { ClassSection } from '../types';
 import { DEFAULT_PROGRAM_PHASES } from '../constants/program';
 import { LESSON_PLANS } from '../data/lessonPlans';
+import {
+  COLORS_KINGDOM_SCRIPT,
+  TIME_ACTIVITY_SCRIPT,
+  NATURE_COURT_SCRIPT,
+  WALL_OF_SILENCE_SCRIPT,
+  MEN_IN_THE_SUN_SCRIPT,
+} from '../data/scripts';
 import { Calendar, Clock, BookOpen, Users, Star, ChevronLeft, MapPin, Phone, Mail, ExternalLink, Printer } from 'lucide-react';
+
 
 // French day names
 const FRENCH_DAY_NAMES: Record<number, string> = {
@@ -32,6 +40,57 @@ const FIXED_TIME_SLOTS: TimeSlot[] = [
   { start: '16:30', end: '17:30', duration: 60, period: 'afternoon' },
 ];
 const SCHEDULE_DAYS = [1, 2, 4];
+
+
+// The 5 official theatrical scripts matching TheatricalScriptsPage exactly
+const OFFICIAL_SCRIPTS = [
+  {
+    title: 'مَسْرَحِيَّةُ «مَمْلَكَةُ الأَلْوَانِ»',
+    level: 'المستوى الثاني ابتدائي (CE1)',
+    duration: '20–25 دقيقة',
+    characterCount: 9,
+    theme: 'الوحدة والتكامل والتنوع',
+    icon: '🎨',
+    gradient: 'from-amber-600 to-amber-700',
+  },
+  {
+    title: 'مَسْرَحِيَّةُ «نَشَاطُ الوَقْتِ»',
+    level: 'المستوى الرابع ابتدائي (CM1)',
+    duration: '20–25 دقيقة',
+    characterCount: 10,
+    theme: 'تنظيم الوقت وأهميته في النجاح',
+    icon: '⏰',
+    gradient: 'from-blue-600 to-blue-700',
+  },
+  {
+    title: 'مَسْرَحِيَّةُ «مَحْكَمَةُ الطَّبِيعَةِ»',
+    level: 'المستوى الخامس ابتدائي (CM2)',
+    duration: '25–30 دقيقة',
+    characterCount: 11,
+    theme: 'حماية البيئة ومسؤولية الإنسان',
+    icon: '🌿',
+    gradient: 'from-emerald-600 to-emerald-700',
+  },
+  {
+    title: 'مَسْرَحِيَّةُ «جِدَارُ الصَّمْتِ»',
+    level: 'المستوى السادس ابتدائي (6AEP)',
+    duration: '30–35 دقيقة',
+    characterCount: 12,
+    theme: 'مناهضة التنمر وبناء الثقة بالنفس',
+    icon: '🧱',
+    gradient: 'from-purple-600 to-purple-700',
+  },
+  {
+    title: 'مَسْرَحِيَّةُ «رِجَالٌ فِي الشَّمْسِ»',
+    level: 'الأولى والثانية إعدادي (1APIC / 2APIC)',
+    duration: '40–50 دقيقة',
+    characterCount: 11,
+    theme: 'عن رواية غسان كنفاني — الأمل والتضحية والوعي',
+    icon: '☀️',
+    gradient: 'from-rose-600 to-rose-700',
+  },
+];
+
 
 export default function VisitorSite() {
   const classes = useLiveQuery(() => db.classes.orderBy('order').toArray()) ?? [];
@@ -110,8 +169,8 @@ export default function VisitorSite() {
               <div className="text-sm text-white/70 mt-1">أيام في الأسبوع</div>
             </div>
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/10">
-              <div className="text-3xl font-black text-secondary">{scripts.length}</div>
-              <div className="text-sm text-white/70 mt-1">نص مسرحي</div>
+              <div className="text-3xl font-black text-secondary">{OFFICIAL_SCRIPTS.length}</div>
+              <div className="text-sm text-white/70 mt-1">نصوص مسرحية رسمية</div>
             </div>
           </div>
         </div>
@@ -155,12 +214,13 @@ export default function VisitorSite() {
                 <span className="text-3xl">📖</span>
               </div>
               <h3 className="font-bold text-text text-lg mb-2 group-hover:text-primary transition-colors">النصوص المسرحية</h3>
-              <p className="text-sm text-text-muted mb-3">اشتغال على نصوص مسرحية مناسبة للأعمار: رجال في الشمس، جدار الصمت...</p>
+              <p className="text-sm text-text-muted mb-3">5 مسرحيات كاملة: مملكة الألوان، نشاط الوقت، محكمة الطبيعة، جدار الصمت، رجال في الشمس</p>
               <div className="inline-flex items-center gap-1 text-xs font-bold text-primary group-hover:text-secondary-dark transition-colors">
                 <span>تصفح التبويبات وقراءة النصوص</span>
                 <ChevronLeft size={14} />
               </div>
             </Link>
+
 
             <Link
               to="/weekly-reports"
@@ -349,62 +409,77 @@ export default function VisitorSite() {
       </section>
 
       {/* ========== PLAYS / SCRIPTS ========== */}
-      {scripts.length > 0 && (
-        <section id="plays" className="py-16 md:py-24 no-print">
-          <div className="max-w-6xl mx-auto px-4">
-            <div className="text-center mb-8">
-              <h2 className="text-3xl md:text-4xl font-black text-text mb-3">النصوص المسرحية</h2>
-              <div className="w-20 h-1 bg-secondary mx-auto rounded-full mb-4"></div>
-              <p className="text-text-muted mb-6">مجموعة من النصوص المسرحية المعتمدة في الورشة</p>
-              
-              <Link
-                to="/scripts"
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-primary to-primary-light text-white font-bold px-6 py-3 rounded-xl shadow-md hover:shadow-lg hover:scale-105 transition-all text-sm"
-              >
-                <span>🎭 فتح صفحة النصوص المسرحية (تبويبات: رجال في الشمس & جدار الصمت)</span>
-                <ChevronLeft size={16} />
-              </Link>
-            </div>
+      <section id="plays" className="py-16 md:py-24 no-print">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl md:text-4xl font-black text-text mb-3">النصوص المسرحية الرسمية</h2>
+            <div className="w-20 h-1 bg-secondary mx-auto rounded-full mb-4"></div>
+            <p className="text-text-muted mb-6 max-w-xl mx-auto">
+              5 نصوص مسرحية كاملة ومشكولة مع الدفتر المسرحي وبطاقات الشخصيات وإرشادات الإخراج
+            </p>
+            
+            <Link
+              to="/scripts"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-primary to-primary-light text-white font-bold px-7 py-3.5 rounded-xl shadow-md hover:shadow-lg hover:scale-105 transition-all text-sm"
+            >
+              <span>🎭 تصفح وقراءة النصوص المسرحية الكاملة في التبويبات</span>
+              <ChevronLeft size={16} />
+            </Link>
+          </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {scripts.slice(0, 6).map(script => (
-                <div key={script.id} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-shadow group">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {OFFICIAL_SCRIPTS.map((script, idx) => (
+              <Link
+                key={idx}
+                to="/scripts"
+                className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all group flex flex-col justify-between"
+              >
+                <div>
                   {/* Card header */}
-                  <div className="bg-gradient-to-l from-primary/90 to-primary p-5 text-white">
-                    <div className="flex items-start justify-between">
+                  <div className={`bg-gradient-to-l ${script.gradient} p-5 text-white`}>
+                    <div className="flex items-start justify-between gap-3">
                       <div>
-                        <h3 className="font-bold text-lg leading-tight">{script.title}</h3>
-                        <p className="text-white/70 text-sm mt-1">{script.level}</p>
+                        <h3 className="font-bold text-lg leading-snug">{script.title}</h3>
+                        <p className="text-white/80 text-xs mt-1.5 font-medium">{script.level}</p>
                       </div>
-                      <span className="text-3xl opacity-30 group-hover:opacity-50 transition-opacity">🎬</span>
+                      <span className="text-3xl shrink-0 p-2 bg-white/10 rounded-xl backdrop-blur-sm group-hover:scale-110 transition-transform">
+                        {script.icon}
+                      </span>
                     </div>
                   </div>
+
                   {/* Card body */}
-                  <div className="p-5">
-                    <div className="grid grid-cols-2 gap-3 text-sm">
-                      <div className="flex items-center gap-2 text-text-muted">
-                        <Clock size={14} />
+                  <div className="p-5 space-y-3">
+                    <p className="text-xs text-text-muted line-clamp-2 leading-relaxed">
+                      🎯 <strong>الموضوع:</strong> {script.theme}
+                    </p>
+
+                    <div className="grid grid-cols-2 gap-3 text-xs pt-2 border-t border-gray-100">
+                      <div className="flex items-center gap-1.5 text-gray-600 font-medium">
+                        <Clock size={13} className="text-primary" />
                         <span>{script.duration}</span>
                       </div>
-                      <div className="flex items-center gap-2 text-text-muted">
-                        <Users size={14} />
+                      <div className="flex items-center gap-1.5 text-gray-600 font-medium">
+                        <Users size={13} className="text-primary" />
                         <span>{script.characterCount} شخصيات</span>
                       </div>
                     </div>
-                    {script.techniques && script.techniques.length > 0 && (
-                      <div className="mt-3 flex flex-wrap gap-1">
-                        {script.techniques.slice(0, 3).map((tech, i) => (
-                          <span key={i} className="text-[10px] bg-primary/5 text-primary px-2 py-0.5 rounded-full">{tech}</span>
-                        ))}
-                      </div>
-                    )}
                   </div>
                 </div>
-              ))}
-            </div>
+
+                {/* Card footer CTA */}
+                <div className="px-5 pb-5 pt-0">
+                  <div className="w-full py-2 px-3 rounded-xl bg-gray-50 group-hover:bg-primary group-hover:text-white text-primary text-xs font-bold text-center transition-colors flex items-center justify-center gap-1">
+                    <span>قراءة النص المسرحي ودراسته</span>
+                    <ChevronLeft size={13} />
+                  </div>
+                </div>
+              </Link>
+            ))}
           </div>
-        </section>
-      )}
+        </div>
+      </section>
+
 
       {/* ========== FOOTER ========== */}
       <footer className="bg-gradient-to-bl from-[#1a1a2e] to-[#16213e] text-white py-12 no-print">
