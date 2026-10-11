@@ -14,7 +14,7 @@ import MultiSelect from '../components/ui/MultiSelect';
 import StatCard from '../components/ui/StatCard';
 import { BarChart3, Printer, CheckCircle2, Clock, AlertTriangle, XCircle, ChevronDown, ChevronUp, Save, CalendarDays, FileBarChart, CheckSquare } from 'lucide-react';
 
-function DailyReportTab() {
+export function DailyReportTab() {
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
   const sessions = useLiveQuery(() => db.sessions.where('date').equals(selectedDate).toArray(), [selectedDate]) ?? [];
   const classes = useLiveQuery(() => db.classes.toArray()) ?? [];
@@ -137,7 +137,7 @@ function DailyReportTab() {
   );
 }
 
-function CompletedReportsTab() {
+export function CompletedReportsTab() {
   const sessions = useLiveQuery(() => db.sessions.where('status').equals('completed').reverse().sortBy('date')) ?? [];
   const classes = useLiveQuery(() => db.classes.toArray()) ?? [];
 
@@ -187,7 +187,7 @@ function CompletedReportsTab() {
   );
 }
 
-function ClassReportsTab() {
+export function ClassReportsTab() {
   const classes = useLiveQuery(() => db.classes.orderBy('order').toArray()) ?? [];
   const [selectedClass, setSelectedClass] = useState('');
   const [report, setReport] = useState<ClassReport | null>(null);

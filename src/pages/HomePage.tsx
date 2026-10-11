@@ -22,10 +22,10 @@ export default function HomePage() {
   const getClassName = (classId: number) => classes.find(c => c.id === classId)?.name || '';
 
   const navCards = [
-    { icon: '🎬', label: 'النصوص المسرحية', desc: 'إدارة النصوص والمسرحيات', to: '/scripts', color: 'bg-purple-50 border-purple-200' },
-    { icon: '🗓️', label: 'جدول الحصص', desc: 'مواعيد الحصص الأسبوعية', to: '/schedule', color: 'bg-blue-50 border-blue-200' },
-    { icon: '🎭', label: 'جدول التداريب', desc: 'دفتر التتبع اليومي', to: '/training', color: 'bg-red-50 border-red-200' },
-    { icon: '📚', label: 'البرنامج السنوي', desc: 'التخطيط السنوي للورشة', to: '/program', color: 'bg-green-50 border-green-200' },
+    { icon: '🎬', label: 'النصوص المسرحية', desc: 'إدارة النصوص والمسرحيات', to: '/admin/scripts', color: 'bg-purple-50 border-purple-200' },
+    { icon: '🗓️', label: 'جدول الحصص', desc: 'مواعيد الحصص الأسبوعية', to: '/admin/schedule', color: 'bg-blue-50 border-blue-200' },
+    { icon: '🎭', label: 'جدول التداريب', desc: 'دفتر التتبع اليومي', to: '/admin/training', color: 'bg-red-50 border-red-200' },
+    { icon: '📚', label: 'البرنامج السنوي', desc: 'التخطيط السنوي للورشة', to: '/admin/program', color: 'bg-green-50 border-green-200' },
   ];
 
   return (

@@ -25,6 +25,7 @@ export interface TrainingSession {
   studentsNeedingSupport: string;
   nextSessionPlan: string;
   scriptId?: number;
+  lessonPlanId?: string;
   sceneInfo: string;
   status: SessionStatus;
   sessionNumber: number;
@@ -77,6 +78,29 @@ export interface Holiday {
   type: 'vacation' | 'national' | 'custom';
 }
 
+export interface LessonPlanStep {
+  title: string;
+  duration: number;
+  instructions: string;
+  teacherObserves: string;
+  adaptation?: string;
+}
+
+export interface LessonPlan {
+  id: string;
+  sessionNumber: number;
+  date: string;
+  unitId: string;
+  title: string;
+  competency: string;
+  objectives: string[];
+  warmup: string;
+  steps: LessonPlanStep[];
+  assessment: string[];
+  nextStep: string;
+  techniques: string[];
+}
+
 export interface ProgramPhase {
   id: string;
   title: string;
@@ -98,6 +122,7 @@ export interface AppSettings {
   schoolName: string;
   academicYearStart: string;
   academicYearEnd: string;
+  programVersion?: string;
 }
 
 export interface AdminAuth {

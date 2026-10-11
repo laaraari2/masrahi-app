@@ -98,11 +98,11 @@ export default function SettingsPage() {
     if (!confirm('سيتم تعبئة مواضيع وأهداف وأنشطة الحصص من أكتوبر 2026 إلى يناير 2027 حسب البرنامج المعد. هل تريد المتابعة؟')) return;
     setProgLoading(true);
     try {
-      const result = await populateProgram();
+      const result = await populateProgram(true);
       setProgMsg({ type: 'success', text: `✅ تم تعبئة ${result.updated} حصة بنجاح (${result.skipped} تم تخطيها)` });
       setTimeout(() => setProgMsg(null), 5000);
     } catch (e) {
-      setProgMsg({ type: 'error', text: 'حدث خطأ أثناء تعبئة البرنامج' });
+      setProgMsg({ type: 'error', text: 'حدث خطأ أثناء تحديث الجذاذات' });
     }
     setProgLoading(false);
   };
@@ -174,8 +174,8 @@ export default function SettingsPage() {
 
       {/* Program Population */}
       <Card className="mb-6">
-        <h2 className="text-lg font-bold mb-4"><BookOpen size={18} className="inline ml-1" /> تعبئة البرنامج الدراسي</h2>
-        <p className="text-sm text-text-muted mb-4">تعبئة مواضيع وأهداف وأنشطة جميع الحصص تلقائياً حسب البرنامج المعد من أكتوبر 2026 إلى 22 يناير 2027.</p>
+        <h2 className="text-lg font-bold mb-4"><BookOpen size={18} className="inline ml-1" /> إدارة الجذاذات</h2>
+        <p className="text-sm text-text-muted mb-4">تعبئة الجذاذات التفصيلية المقترحة لحصص 1APIC، من 29 شتنبر 2026 إلى 25 ماي 2027، مع إحماء 5 دقائق فقط في كل حصة.</p>
         {progMsg && (
           <p className={`text-sm px-3 py-2 rounded-lg mb-3 ${
             progMsg.type === 'success'
@@ -188,7 +188,7 @@ export default function SettingsPage() {
           icon={<BookOpen size={18} />}
           disabled={progLoading}
         >
-          {progLoading ? 'جاري التعبئة...' : 'تعبئة البرنامج'}
+          {progLoading ? 'جاري التحديث...' : 'تحديث الجذاذات'}
         </Button>
       </Card>
 

@@ -5,6 +5,7 @@ import { db } from '../db/database';
 import type { TrainingSession, SessionStatus } from '../types';
 import { SESSION_STATUS_LABELS } from '../types';
 import { THEATER_TECHNIQUES } from '../constants/techniques';
+import { LESSON_PLANS_BY_DATE } from '../data/lessonPlans';
 import { formatDateFull, formatTime } from '../utils/dateUtils';
 import Header from '../components/layout/Header';
 import Card from '../components/ui/Card';
@@ -83,6 +84,25 @@ export default function TrainingFormPage() {
   }
 
   const linkedScript = form.scriptId ? scripts.find(s => s.id === form.scriptId) : null;
+  const lessonPlan = form.lessonPlanId
+    ? Object.values(LESSON_PLANS_BY_DATE).find(plan => plan.id === form.lessonPlanId)
+    : LESSON_PLANS_BY_DATE[session.date];
+
+  const applyLessonPlan = () => {
+    if (!lessonPlan) return;
+    const activities = [
+      `1) الإحماء — 5 د: ${lessonPlan.warmup}`,
+      ...lessonPlan.steps.map((step, index) => `${index + 2}) ${step.title} — ${step.duration} د\n${step.instructions}`),
+    ].join('\n\n');
+    setForm(prev => ({
+      ...prev,
+      lessonPlanId: lessonPlan.id,
+      topic: lessonPlan.title,
+      objectives: lessonPlan.objectives.map(item => `• ${item}`).join('\n'),
+      activities,
+      techniques: lessonPlan.techniques,
+    }));
+  };
 
   return (
     <div>
@@ -112,6 +132,49 @@ export default function TrainingFormPage() {
           </div>
         )}
       </Card>
+
+      {lessonPlan && cls?.name === '1APIC' && (
+        <Card className="mb-4 border-primary/20 bg-gradient-to-l from-primary/5 to-transparent">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+            <div>
+              <div className="text-xs text-primary font-semibold mb-1">📋 الجذاذة الجاهزة للحصة</div>
+              <h2 className="font-bold text-lg">{lessonPlan.sessionNumber}. {lessonPlan.title}</h2>
+              <p className="text-sm text-text-muted mt-1">{lessonPlan.competency}</p>
+            </div>
+            <Button variant="secondary" size="sm" onClick={applyLessonPlan} icon={<Save size={16} />}>
+              اعتماد الجذاذة في البطاقة
+            </Button>
+          </div>
+
+          <details className="mt-4 pt-3 border-t border-border">
+            <summary className="cursor-pointer text-sm font-semibold text-primary">عرض سير الجذاذة</summary>
+            <div className="mt-3 grid grid-cols-1 lg:grid-cols-2 gap-3">
+              <div className="rounded-xl bg-white/70 p-3">
+                <h3 className="font-semibold text-sm mb-2">🎯 الأهداف</h3>
+                <ul className="text-sm text-text-muted space-y-1">
+                  {lessonPlan.objectives.map((item, index) => <li key={index}>• {item}</li>)}
+                </ul>
+              </div>
+              <div className="rounded-xl bg-white/70 p-3">
+                <h3 className="font-semibold text-sm mb-2">🔥 الإحماء — 5 د</h3>
+                <p className="text-sm text-text-muted">{lessonPlan.warmup}</p>
+              </div>
+              <div className="lg:col-span-2 space-y-2">
+                {lessonPlan.steps.map((step, index) => (
+                  <div key={`${lessonPlan.id}-${index}`} className="rounded-xl bg-white/70 border border-border p-3">
+                    <div className="flex items-center justify-between gap-3">
+                      <h3 className="font-semibold text-sm">{index + 1}. {step.title}</h3>
+                      <span className="text-xs text-text-muted">{step.duration} د</span>
+                    </div>
+                    <p className="text-sm text-text-muted mt-1 whitespace-pre-line">{step.instructions}</p>
+                    <p className="text-xs mt-2"><strong>ما يلاحظ الأستاذ:</strong> <span className="text-text-muted">{step.teacherObserves}</span></p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </details>
+        </Card>
+      )}
 
       {/* Form */}
       <div className="space-y-1">

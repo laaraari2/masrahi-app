@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { seedDatabase, seedScripts } from './db/seeds';
 import { initAdminAuth } from './services/authService';
+import { initializeWorkshopProgram } from './services/programPopulator';
 
 import AppLayout from './components/layout/AppLayout';
 import VisitorLayout from './components/layout/VisitorLayout';
@@ -19,6 +20,8 @@ import ReportsPage from './pages/ReportsPage';
 import HolidaysPage from './pages/HolidaysPage';
 import SettingsPage from './pages/SettingsPage';
 import VisitorSite from './pages/VisitorSite';
+import TheatricalScriptsPage from './pages/TheatricalScriptsPage';
+import WeeklyReportsPage from './pages/WeeklyReportsPage';
 
 import { db } from './db/database';
 
@@ -27,12 +30,6 @@ export default function App() {
     const initDB = async () => {
       // Initialize admin auth first
       await initAdminAuth();
-
-      // Re-seed programs to apply the new detailed 4 exercises per phase
-      const programCount = await db.programs.count();
-      if (programCount > 0) {
-        await db.programs.clear();
-      }
 
       const classCount = await db.classes.count();
       // Re-seed if old defaults detected (4 old classes or 8 classes with wrong labels)
@@ -50,6 +47,7 @@ export default function App() {
       }
       await seedDatabase();
       await seedScripts();
+      await initializeWorkshopProgram();
     };
     
     initDB().catch(console.error);
@@ -61,6 +59,8 @@ export default function App() {
         {/* موقع الزوار */}
         <Route element={<VisitorLayout />}>
           <Route index element={<VisitorSite />} />
+          <Route path="scripts" element={<TheatricalScriptsPage />} />
+          <Route path="weekly-reports" element={<WeeklyReportsPage />} />
         </Route>
 
         {/* صفحة تسجيل الدخول */}

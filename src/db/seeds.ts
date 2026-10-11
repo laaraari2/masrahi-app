@@ -33,6 +33,7 @@ export async function seedDatabase(): Promise<void> {
     schoolName: 'مؤسسة العمران (AL OUMRANE)',
     academicYearStart: ACADEMIC_YEAR.start,
     academicYearEnd: ACADEMIC_YEAR.end,
+    programVersion: undefined,
   });
 
   // 5. توليد الحصص لكل قسم
@@ -45,15 +46,33 @@ export async function seedDatabase(): Promise<void> {
 }
 
 export async function seedScripts(): Promise<void> {
-  const scriptsCount = await db.scripts.count();
-  if (scriptsCount > 0) return; // Only seed if empty
-
+  const existingScripts = await db.scripts.toArray();
+  const existingTitles = new Set(existingScripts.map(s => s.title));
   const now = new Date().toISOString();
-  const scriptsToInsert = defaultScriptsData.map(s => ({
-    ...s,
-    createdAt: now,
-    updatedAt: now,
-  }));
 
-  await db.scripts.bulkAdd(scriptsToInsert as any);
+  const missingScripts = defaultScriptsData
+    .filter(s => !existingTitles.has(s.title))
+    .map(s => ({
+      title: s.title,
+      level: s.level,
+      duration: s.duration,
+      characterCount: s.characterCount,
+      characters: s.characters,
+      fullText: s.fullText,
+      scenes: s.scenes,
+      directionNotes: s.directionNotes,
+      stagingNotes: s.stagingNotes,
+      soundEffects: s.soundEffects,
+      music: s.music,
+      lighting: s.lighting,
+      scenography: s.scenography,
+      accessories: s.accessories,
+      techniques: s.techniques,
+      createdAt: now,
+      updatedAt: now,
+    }));
+
+  if (missingScripts.length > 0) {
+    await db.scripts.bulkAdd(missingScripts as any);
+  }
 }

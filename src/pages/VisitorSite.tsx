@@ -5,6 +5,7 @@ import { db } from '../db/database';
 import { DAY_NAMES } from '../types';
 import type { ClassSection } from '../types';
 import { DEFAULT_PROGRAM_PHASES } from '../constants/program';
+import { LESSON_PLANS } from '../data/lessonPlans';
 import { Calendar, Clock, BookOpen, Users, Star, ChevronLeft, MapPin, Phone, Mail, ExternalLink, Printer } from 'lucide-react';
 
 // French day names
@@ -60,7 +61,12 @@ export default function VisitorSite() {
             <a href="#about" className="hover:text-primary transition-colors">عن الورشة</a>
             <a href="#schedule" className="hover:text-primary transition-colors">استعمال الزمن</a>
             <a href="#program" className="hover:text-primary transition-colors">البرنامج</a>
-            <a href="#plays" className="hover:text-primary transition-colors">المسرحيات</a>
+            <Link to="/scripts" className="hover:text-primary transition-colors font-bold text-primary flex items-center gap-1">
+              <span>🎭 النصوص المسرحية</span>
+            </Link>
+            <Link to="/weekly-reports" className="hover:text-primary transition-colors font-bold text-gray-700 hover:text-primary flex items-center gap-1">
+              <span>📋 تقارير الحصص</span>
+            </Link>
             <Link to="/admin" className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-dark transition-colors flex items-center gap-1 text-xs">
               <ExternalLink size={14} />
               لوحة التحكم
@@ -129,7 +135,7 @@ export default function VisitorSite() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 text-center hover:shadow-md transition-shadow">
               <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <span className="text-3xl">🎭</span>
@@ -137,13 +143,43 @@ export default function VisitorSite() {
               <h3 className="font-bold text-text text-lg mb-2">التشخيص والتعبير</h3>
               <p className="text-sm text-text-muted">تمارين متنوعة في التعبير الجسدي والصوتي لبناء شخصية فنية متكاملة</p>
             </div>
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 text-center hover:shadow-md transition-shadow">
-              <div className="w-16 h-16 bg-secondary/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+
+            <Link
+              to="/scripts"
+              className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 text-center hover:shadow-lg hover:border-secondary/50 hover:-translate-y-1 transition-all group block relative overflow-hidden"
+            >
+              <div className="absolute top-2 left-2 bg-secondary/10 text-secondary-dark text-[10px] font-bold px-2 py-0.5 rounded-full">
+                اضغط للتصفح 👈
+              </div>
+              <div className="w-16 h-16 bg-secondary/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 group-hover:bg-secondary/20 transition-all">
                 <span className="text-3xl">📖</span>
               </div>
-              <h3 className="font-bold text-text text-lg mb-2">النصوص المسرحية</h3>
-              <p className="text-sm text-text-muted">اشتغال على نصوص مسرحية مناسبة للأعمار والمستويات المختلفة</p>
-            </div>
+              <h3 className="font-bold text-text text-lg mb-2 group-hover:text-primary transition-colors">النصوص المسرحية</h3>
+              <p className="text-sm text-text-muted mb-3">اشتغال على نصوص مسرحية مناسبة للأعمار: رجال في الشمس، جدار الصمت...</p>
+              <div className="inline-flex items-center gap-1 text-xs font-bold text-primary group-hover:text-secondary-dark transition-colors">
+                <span>تصفح التبويبات وقراءة النصوص</span>
+                <ChevronLeft size={14} />
+              </div>
+            </Link>
+
+            <Link
+              to="/weekly-reports"
+              className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 text-center hover:shadow-lg hover:border-primary/50 hover:-translate-y-1 transition-all group block relative overflow-hidden"
+            >
+              <div className="absolute top-2 left-2 bg-primary/10 text-primary text-[10px] font-bold px-2 py-0.5 rounded-full">
+                جديد الحصص 👈
+              </div>
+              <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 group-hover:bg-primary/20 transition-all">
+                <span className="text-3xl">📋</span>
+              </div>
+              <h3 className="font-bold text-text text-lg mb-2 group-hover:text-primary transition-colors">تقارير الحصص الأسبوعية</h3>
+              <p className="text-sm text-text-muted mb-3">سجل أسبوعي يوثق إنجازات الورشات، موضوع الحصة، والتقنيات المسرحية المطبقة</p>
+              <div className="inline-flex items-center gap-1 text-xs font-bold text-primary group-hover:text-primary-dark transition-colors">
+                <span>استعراض التقارير والطباعة</span>
+                <ChevronLeft size={14} />
+              </div>
+            </Link>
+
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 text-center hover:shadow-md transition-shadow">
               <div className="w-16 h-16 bg-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <span className="text-3xl">🌟</span>
@@ -258,7 +294,16 @@ export default function VisitorSite() {
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-black text-text mb-3">البرنامج السنوي</h2>
             <div className="w-20 h-1 bg-secondary mx-auto rounded-full mb-4"></div>
-            <p className="text-text-muted">المراحل الخمس لورشة المسرح خلال السنة الدراسية</p>
+            <p className="text-text-muted">6 وحدات تكوينية ومسار من 30 حصة لـ 1APIC نحو العرض النهائي في ماي</p>
+          </div>
+
+          <div className="bg-bg rounded-2xl p-5 border border-gray-100 mb-8">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+              <div><div className="text-2xl font-black text-primary">30</div><div className="text-xs text-text-muted">حصة لـ 1APIC</div></div>
+              <div><div className="text-2xl font-black text-primary">5 د</div><div className="text-xs text-text-muted">الإحماء</div></div>
+              <div><div className="text-2xl font-black text-primary">60 د</div><div className="text-xs text-text-muted">مدة الحصة</div></div>
+              <div><div className="text-2xl font-black text-primary">{LESSON_PLANS.filter(p => p.unitId.startsWith('unit-')).length}</div><div className="text-xs text-text-muted">جذاذات مفصلة</div></div>
+            </div>
           </div>
 
           <div className="relative">
@@ -307,10 +352,18 @@ export default function VisitorSite() {
       {scripts.length > 0 && (
         <section id="plays" className="py-16 md:py-24 no-print">
           <div className="max-w-6xl mx-auto px-4">
-            <div className="text-center mb-12">
+            <div className="text-center mb-8">
               <h2 className="text-3xl md:text-4xl font-black text-text mb-3">النصوص المسرحية</h2>
               <div className="w-20 h-1 bg-secondary mx-auto rounded-full mb-4"></div>
-              <p className="text-text-muted">مجموعة من النصوص المسرحية المعتمدة في الورشة</p>
+              <p className="text-text-muted mb-6">مجموعة من النصوص المسرحية المعتمدة في الورشة</p>
+              
+              <Link
+                to="/scripts"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-primary to-primary-light text-white font-bold px-6 py-3 rounded-xl shadow-md hover:shadow-lg hover:scale-105 transition-all text-sm"
+              >
+                <span>🎭 فتح صفحة النصوص المسرحية (تبويبات: رجال في الشمس & جدار الصمت)</span>
+                <ChevronLeft size={16} />
+              </Link>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

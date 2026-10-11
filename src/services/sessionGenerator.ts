@@ -2,6 +2,7 @@ import type { ClassSection, TrainingSession, Holiday } from '../types';
 import { getWeekDatesInRange, toISODate } from '../utils/dateUtils';
 import { isDateHoliday } from './holidayChecker';
 import { db } from '../db/database';
+import { WORKSHOP } from '../constants/holidays';
 
 export function generateSessionsForClass(
   cls: ClassSection,
@@ -9,7 +10,12 @@ export function generateSessionsForClass(
   yearStart: string,
   yearEnd: string
 ): Omit<TrainingSession, 'id'>[] {
-  const dates = getWeekDatesInRange(cls.dayOfWeek, yearStart, yearEnd);
+  const isTargetWorkshop = cls.level === 'الأولى إعدادي (1APIC)' || cls.name === WORKSHOP.targetLevel;
+  const effectiveStart = isTargetWorkshop && WORKSHOP.start > yearStart ? WORKSHOP.start : yearStart;
+  const effectiveEnd = isTargetWorkshop && WORKSHOP.end < yearEnd ? WORKSHOP.end : yearEnd;
+  const dates = effectiveStart <= effectiveEnd
+    ? getWeekDatesInRange(cls.dayOfWeek, effectiveStart, effectiveEnd)
+    : [];
   const sessions: Omit<TrainingSession, 'id'>[] = [];
   let sessionNumber = 0;
 
@@ -69,6 +75,9 @@ export async function regenerateFutureSessions(classId: number): Promise<void> {
   const yearStart = settings?.academicYearStart || '2026-09-07';
   const yearEnd = settings?.academicYearEnd || '2027-07-03';
   const today = toISODate(new Date());
+  const isTargetWorkshop = cls.level === 'الأولى إعدادي (1APIC)' || cls.name === WORKSHOP.targetLevel;
+  const regenerationStart = isTargetWorkshop && today < WORKSHOP.start ? WORKSHOP.start : today;
+  const regenerationEnd = isTargetWorkshop ? WORKSHOP.end : yearEnd;
 
   // حذف الحصص المستقبلية غير المنجزة فقط
   const futureSessions = await db.sessions
@@ -99,7 +108,9 @@ export async function regenerateFutureSessions(classId: number): Promise<void> {
   const maxSessionNum = lastCompleted.reduce((max, s) => Math.max(max, s.sessionNumber), 0);
 
   // توليد الحصص الجديدة من اليوم
-  const dates = getWeekDatesInRange(cls.dayOfWeek, today, yearEnd);
+  const dates = regenerationStart <= regenerationEnd
+    ? getWeekDatesInRange(cls.dayOfWeek, regenerationStart, regenerationEnd)
+    : [];
   const newSessions: Omit<TrainingSession, 'id'>[] = [];
   let num = maxSessionNum;
 
