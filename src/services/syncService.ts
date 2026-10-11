@@ -1,18 +1,19 @@
 import { supabase } from '../lib/supabase';
 import { db } from '../db/database';
-import type { TrainingSession, ClassSection, AppSettings } from '../types';
+import type { TrainingSession, ClassSection, AppSettings, TheaterScript } from '../types';
 
 /**
  * خدمة المزامنة السحابية مع Supabase
  */
 export const syncService = {
   /**
-   * رفع كافة البيانات المحلية إلى Supabase
+   * رفع كافة البيانات المحلية (الأقسام، الحصص، التقارير، النصوص، الإعدادات) إلى Supabase
    */
   async pushAllToCloud(): Promise<{ success: boolean; error?: string }> {
     try {
       const localClasses = await db.classes.toArray();
       const localSessions = await db.sessions.toArray();
+      const localScripts = await db.scripts.toArray();
       const localSettings = await db.settings.toCollection().first();
 
       // 1. رفع الأقسام
@@ -29,7 +30,7 @@ export const syncService = {
         await supabase.from('classes').upsert(classesPayload, { onConflict: 'id' });
       }
 
-      // 2. رفع الحصص
+      // 2. رفع الحصص والتقارير
       if (localSessions.length > 0) {
         const sessionsPayload = localSessions.map(s => ({
           id: s.id,
@@ -61,7 +62,34 @@ export const syncService = {
         }
       }
 
-      // 3. رفع الإعدادات
+      // 3. رفع النصوص المسرحية
+      if (localScripts.length > 0) {
+        const scriptsPayload = localScripts.map(sc => ({
+          id: sc.id,
+          title: sc.title,
+          level: sc.level,
+          duration: sc.duration,
+          character_count: sc.characterCount || 0,
+          characters: sc.characters || '',
+          full_text: sc.fullText || '',
+          scenes: sc.scenes || '',
+          direction_notes: sc.directionNotes || '',
+          staging_notes: sc.stagingNotes || '',
+          sound_effects: sc.soundEffects || '',
+          music: sc.music || '',
+          lighting: sc.lighting || '',
+          scenography: sc.scenography || '',
+          accessories: sc.accessories || '',
+          techniques: sc.techniques || [],
+        }));
+
+        for (let i = 0; i < scriptsPayload.length; i += 20) {
+          const chunk = scriptsPayload.slice(i, i + 20);
+          await supabase.from('scripts').upsert(chunk, { onConflict: 'id' });
+        }
+      }
+
+      // 4. رفع الإعدادات
       if (localSettings) {
         await supabase.from('settings').upsert({
           id: localSettings.id || 1,
@@ -90,6 +118,7 @@ export const syncService = {
       const { data: cloudClasses, error: cErr } = await supabase.from('classes').select('*');
       if (cErr) throw cErr;
 
+      const { data: cloudScripts } = await supabase.from('scripts').select('*');
       const { data: cloudSettings } = await supabase.from('settings').select('*').limit(1);
 
       if (cloudClasses && cloudClasses.length > 0) {
@@ -129,6 +158,30 @@ export const syncService = {
           holidayName: s.holiday_name,
         }));
         await db.sessions.bulkPut(formattedSessions);
+      }
+
+      if (cloudScripts && cloudScripts.length > 0) {
+        const formattedScripts: TheaterScript[] = cloudScripts.map(sc => ({
+          id: sc.id,
+          title: sc.title,
+          level: sc.level,
+          duration: sc.duration || '45 دقيقة',
+          characterCount: sc.character_count || 0,
+          characters: sc.characters || '',
+          fullText: sc.full_text || '',
+          scenes: sc.scenes || '',
+          directionNotes: sc.direction_notes || '',
+          stagingNotes: sc.staging_notes || '',
+          soundEffects: sc.sound_effects || '',
+          music: sc.music || '',
+          lighting: sc.lighting || '',
+          scenography: sc.scenography || '',
+          accessories: sc.accessories || '',
+          techniques: sc.techniques || [],
+          createdAt: sc.created_at || new Date().toISOString(),
+          updatedAt: sc.updated_at || new Date().toISOString(),
+        }));
+        await db.scripts.bulkPut(formattedScripts);
       }
 
       if (cloudSettings && cloudSettings.length > 0) {
