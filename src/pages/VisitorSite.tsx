@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { Link } from 'react-router-dom';
 import { db } from '../db/database';
@@ -13,7 +13,7 @@ import {
   WALL_OF_SILENCE_SCRIPT,
   MEN_IN_THE_SUN_SCRIPT,
 } from '../data/scripts';
-import { Calendar, Clock, BookOpen, Users, Star, ChevronLeft, MapPin, Phone, Mail, ExternalLink, Printer } from 'lucide-react';
+import { Calendar, Clock, BookOpen, Users, Star, ChevronLeft, MapPin, Phone, Mail, ExternalLink, Printer, X } from 'lucide-react';
 
 
 // French day names
@@ -93,6 +93,7 @@ const OFFICIAL_SCRIPTS = [
 
 
 export default function VisitorSite() {
+  const [showBioModal, setShowBioModal] = useState(false);
   const classes = useLiveQuery(() => db.classes.orderBy('order').toArray()) ?? [];
   const settings = useLiveQuery(() => db.settings.toCollection().first());
   const scripts = useLiveQuery(() => db.scripts.toArray()) ?? [];
@@ -108,17 +109,33 @@ export default function VisitorSite() {
       {/* ========== NAVBAR ========== */}
       <nav className="bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-gray-100 no-print">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <img
-              src="/laaraari (2).jpeg"
-              alt="صورة المشرف"
-              className="w-10 h-10 rounded-full object-cover border-2 border-primary/30 shadow-sm"
-            />
-            <div>
-              <div className="font-bold text-primary text-lg leading-tight">ورشة المسرح المدرسي</div>
-              <div className="text-xs text-gray-500">{settings?.schoolName || 'مؤسسة العمران'}</div>
+          <button
+            onClick={() => setShowBioModal(true)}
+            className="flex items-center gap-3 text-right hover:opacity-95 transition-all group cursor-pointer p-1 -m-1 rounded-2xl hover:bg-primary/5"
+            title="انقر هنا للتعرف على المؤطر الأستاذ مصطفى لعرعري"
+          >
+            <div className="relative">
+              <img
+                src="/laaraari (2).jpeg"
+                alt="الأستاذ مصطفى لعرعري"
+                className="w-11 h-11 rounded-full object-cover border-2 border-primary/40 shadow-sm group-hover:border-primary group-hover:scale-105 transition-all"
+              />
+              <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-emerald-500 border-2 border-white rounded-full" title="مؤطر معتمد" />
             </div>
-          </div>
+            <div>
+              <div className="flex items-center gap-1.5">
+                <span className="font-bold text-primary text-base md:text-lg leading-tight group-hover:text-primary-dark transition-colors">
+                  ورشة المسرح المدرسي
+                </span>
+                <span className="text-[10px] bg-primary/10 text-primary font-bold px-1.5 py-0.5 rounded-full hidden sm:inline-block">
+                  بطاقة المؤطر 🎭
+                </span>
+              </div>
+              <div className="text-xs text-gray-500 font-medium">
+                الأستاذ مصطفى لعرعري • {settings?.schoolName || 'مؤسسة العمران'}
+              </div>
+            </div>
+          </button>
           <div className="hidden md:flex items-center gap-6 text-sm font-medium text-gray-600">
             <a href="#home" className="hover:text-primary transition-colors">الرئيسية</a>
             <a href="#about" className="hover:text-primary transition-colors">عن الورشة</a>
@@ -542,6 +559,112 @@ export default function VisitorSite() {
           </div>
         </div>
       </footer>
+
+      {/* ========== MODAL: بطاقة المؤطر مصطفى لعرعري ========== */}
+      {showBioModal && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/65 backdrop-blur-sm animate-fadeIn"
+          onClick={() => setShowBioModal(false)}
+        >
+          <div
+            className="bg-white rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl border border-gray-100 relative"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header Banner */}
+            <div className="relative h-28 bg-gradient-to-r from-primary via-primary-dark to-[#4a0e0e] flex items-end px-6">
+              <button
+                onClick={() => setShowBioModal(false)}
+                className="absolute top-4 left-4 w-9 h-9 rounded-full bg-black/30 hover:bg-black/60 text-white flex items-center justify-center transition-all cursor-pointer shadow-md"
+                title="إغلاق النافذة"
+              >
+                <X size={20} />
+              </button>
+              <div className="absolute top-4 right-5 text-amber-200/90 text-xs font-bold flex items-center gap-1.5 bg-black/20 px-3 py-1 rounded-full backdrop-blur-xs">
+                <span>🎭</span> بطاقة المؤطر المشرف
+              </div>
+            </div>
+
+            {/* Avatar and Main Info */}
+            <div className="px-6 pt-0 pb-6 relative">
+              <div className="flex flex-col sm:flex-row items-center sm:items-end gap-4 -mt-14 mb-4 text-center sm:text-right">
+                <img
+                  src="/laaraari (2).jpeg"
+                  alt="الأستاذ مصطفى لعرعري"
+                  className="w-24 h-24 rounded-2xl object-cover border-4 border-white shadow-xl bg-white shrink-0"
+                />
+                <div className="flex-1 pb-1">
+                  <h3 className="text-xl font-black text-gray-900 leading-tight">
+                    الأستاذ مصطفى لعرعري
+                  </h3>
+                  <p className="text-sm font-bold text-primary mt-0.5">
+                    مؤطر ورشة المسرح المدرسي ومنشط تربوي
+                  </p>
+                  <p className="text-xs text-gray-500 mt-0.5">
+                    {settings?.schoolName || 'مؤسسة العمران للتعليم الخصوصي'}
+                  </p>
+                </div>
+              </div>
+
+              {/* Bio Paragraph */}
+              <div className="bg-amber-50/70 border border-amber-200/70 rounded-2xl p-4 text-sm leading-relaxed text-gray-700 text-justify relative shadow-xs">
+                <div className="text-amber-900 font-bold text-xs mb-1.5 flex items-center gap-1.5">
+                  <span>✨</span> كلمة ورسالة المؤطر:
+                </div>
+                «نؤمن بأن المسرح المدرسي ليس مجرد خشبة وأداء، بل هو فضاء تربوي متكامل ومشتل لبناء الشخصية المتوازنة وصقل المواهب الواعدة. نسعى من خلال هذه الورشة إلى تمكين المتعلمين والمتعلمات من كسر حاجز الخوف، وتنمية مهارات التعبير الجسدي والصوتي، وترسيخ قيم التعاون والتسامح والعمل الجماعي في بيئة محفزة تجمع بين التعلم والمتعة.»
+              </div>
+
+              {/* Skills / Badges */}
+              <div className="mt-4">
+                <div className="text-xs font-bold text-gray-500 mb-2">مجالات التأطير والاشتغال:</div>
+                <div className="flex flex-wrap gap-1.5">
+                  <span className="text-xs bg-primary/10 text-primary font-bold px-2.5 py-1 rounded-lg">
+                    🎭 التعبير المسرحي والإلقاء
+                  </span>
+                  <span className="text-xs bg-amber-100 text-amber-800 font-bold px-2.5 py-1 rounded-lg">
+                    🤝 التنشيط التربوي والثقة بالنفس
+                  </span>
+                  <span className="text-xs bg-emerald-100 text-emerald-800 font-bold px-2.5 py-1 rounded-lg">
+                    🎬 الإخراج والعروض المدرسية
+                  </span>
+                  <span className="text-xs bg-purple-100 text-purple-800 font-bold px-2.5 py-1 rounded-lg">
+                    🌟 صقل المواهب والعمل الجماعي
+                  </span>
+                </div>
+              </div>
+
+              {/* Contact Links */}
+              <div className="mt-5 pt-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div className="flex items-center gap-2 w-full sm:w-auto flex-wrap">
+                  <a
+                    href="mailto:laaraari2@gmail.com"
+                    className="inline-flex items-center justify-center gap-1.5 bg-gray-100 hover:bg-primary hover:text-white text-gray-700 text-xs font-bold px-3.5 py-2.5 rounded-xl transition-all"
+                  >
+                    <Mail size={15} />
+                    <span>laaraari2@gmail.com</span>
+                  </a>
+                  <a
+                    href="https://www.facebook.com/people/Laaraari-Abo-Ilyass/pfbid02Ycwc4wqnmSoEWaWLDDPT6jR5s5veJN87Hhrq7yj5kP9vn1X3dnucS8hdP6SZDRJFl/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-1.5 bg-[#1877F2]/10 hover:bg-[#1877F2] text-[#1877F2] hover:text-white text-xs font-bold px-3.5 py-2.5 rounded-xl transition-all"
+                  >
+                    <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                    </svg>
+                    <span>فيسبوك</span>
+                  </a>
+                </div>
+                <button
+                  onClick={() => setShowBioModal(false)}
+                  className="w-full sm:w-auto text-xs font-bold text-gray-500 hover:text-gray-800 px-3 py-2 cursor-pointer transition-colors"
+                >
+                  إغلاق
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
