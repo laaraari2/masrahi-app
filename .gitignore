@@ -5,3 +5,8 @@ dist-ssr
 .env
 .env.*
 .DS_Store
+*.apk
+android/app/build
+android/build
+android/.gradle
+android/local.properties

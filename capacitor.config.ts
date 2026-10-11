@@ -1,9 +1,12 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.laara.massrahi',
-  appName: 'massrahi',
-  webDir: 'dist'
+  appId: 'com.masrahi.app',
+  appName: 'ورشة المسرح المدرسي',
+  webDir: 'dist',
+  server: {
+    androidScheme: 'https'
+  }
 };
 
 export default config;
