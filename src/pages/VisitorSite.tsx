@@ -352,19 +352,22 @@ export default function VisitorSite() {
       <section id="program" className="py-16 md:py-24 bg-white no-print">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-black text-text mb-3">البرنامج السنوي</h2>
+            <h2 className="text-3xl md:text-4xl font-black text-text mb-3">البرنامج السنوي للورشة</h2>
             <div className="w-20 h-1 bg-secondary mx-auto rounded-full mb-4"></div>
-            <p className="text-text-muted">6 وحدات تكوينية ومسار من 30 حصة لـ 1APIC نحو العرض النهائي في ماي</p>
+            <p className="text-text-muted max-w-2xl mx-auto">
+              مسار تكويني متكامل من 6 وحدات يمتد من شتنبر إلى يناير 2027، ويتوج بأسبوع العروض المسرحية الرسمية في نهاية الأسدس الأول قبيل عطلة منتصف السنة (24 يناير 2027)
+            </p>
           </div>
 
           <div className="bg-bg rounded-2xl p-5 border border-gray-100 mb-8">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-              <div><div className="text-2xl font-black text-primary">30</div><div className="text-xs text-text-muted">حصة لـ 1APIC</div></div>
-              <div><div className="text-2xl font-black text-primary">5 د</div><div className="text-xs text-text-muted">الإحماء</div></div>
-              <div><div className="text-2xl font-black text-primary">60 د</div><div className="text-xs text-text-muted">مدة الحصة</div></div>
-              <div><div className="text-2xl font-black text-primary">{LESSON_PLANS.filter(p => p.unitId.startsWith('unit-')).length}</div><div className="text-xs text-text-muted">جذاذات مفصلة</div></div>
+              <div><div className="text-2xl font-black text-primary">6</div><div className="text-xs text-text-muted">وحدات تكوينية</div></div>
+              <div><div className="text-2xl font-black text-primary">5</div><div className="text-xs text-text-muted">مسرحيات رسمية</div></div>
+              <div><div className="text-2xl font-black text-primary">8</div><div className="text-xs text-text-muted">أقسام مستفيدة</div></div>
+              <div><div className="text-2xl font-black text-primary">يناير 2027</div><div className="text-xs text-text-muted">أسبوع العروض الختامية</div></div>
             </div>
           </div>
+
 
           <div className="relative">
             {/* Timeline line */}

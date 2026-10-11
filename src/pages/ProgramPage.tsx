@@ -18,12 +18,24 @@ export default function ProgramPage() {
   const program = useLiveQuery(() => db.programs.toCollection().first());
   const classes = useLiveQuery(() => db.classes.toArray()) ?? [];
   const sessions = useLiveQuery(() => db.sessions.toArray()) ?? [];
-  const phases = program?.phases ?? DEFAULT_PROGRAM_PHASES;
+
+  const rawPhases = program?.phases;
+  const hasOldMoliere = rawPhases?.some(p => p.title.includes('موليير') || p.description.includes('موليير'));
+  const phases = (!rawPhases || hasOldMoliere) ? DEFAULT_PROGRAM_PHASES : rawPhases;
+
+  // Auto-upgrade database if old phases exist
+  React.useEffect(() => {
+    if (program?.id && hasOldMoliere) {
+      db.programs.update(program.id, { phases: DEFAULT_PROGRAM_PHASES });
+    }
+  }, [program?.id, hasOldMoliere]);
+
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [editPhase, setEditPhase] = useState<ProgramPhase | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [tab, setTab] = useState<'overview' | 'lessons'>('overview');
   const [unitFilter, setUnitFilter] = useState('all');
+
 
   const targetClass = classes.find(c => c.name === '1APIC' || c.level === 'الأولى إعدادي (1APIC)');
   const targetSessions = useMemo(() => sessions.filter(s => targetClass?.id && s.classId === targetClass.id), [sessions, targetClass?.id]);
