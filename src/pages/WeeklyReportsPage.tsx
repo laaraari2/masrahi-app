@@ -28,6 +28,8 @@ import Button from '../components/ui/Button';
 import TextArea from '../components/ui/TextArea';
 import MultiSelect from '../components/ui/MultiSelect';
 import type { TrainingSession } from '../types';
+import { syncService } from '../services/syncService';
+
 import { MOROCCAN_MONTHS } from '../utils/dateUtils';
 import { ACADEMIC_YEAR } from '../constants/holidays';
 
@@ -171,6 +173,7 @@ export default function WeeklyReportsPage() {
 
   const handleSaveDailySession = async (sessionId: number) => {
     await db.sessions.update(sessionId, { ...form, status: 'completed' });
+    syncService.syncSession(sessionId);
     setSavedSessionId(sessionId);
     setTimeout(() => { setSavedSessionId(null); setEditingSessionId(null); }, 1500);
   };
@@ -180,7 +183,7 @@ export default function WeeklyReportsPage() {
     setAddSaving(true);
     try {
       const classInfo = classes.find(c => c.id === Number(addClassId));
-      await db.sessions.add({
+      const newId = await db.sessions.add({
         classId: Number(addClassId),
         date: addDate,
         startTime: addTime,
@@ -197,6 +200,7 @@ export default function WeeklyReportsPage() {
         status: 'completed',
         sessionNumber: 0,
       });
+      syncService.syncSession(Number(newId));
       setAddSaved(true);
       setTimeout(() => {
         setAddSaved(false);
@@ -247,6 +251,7 @@ export default function WeeklyReportsPage() {
           difficulties: reportReason,
         });
       }
+      syncService.syncSession(sessionId);
       setReportSaved(sessionId);
       setTimeout(() => {
         setReportSaved(null);
@@ -258,6 +263,7 @@ export default function WeeklyReportsPage() {
       setReportSaving(false);
     }
   };
+
 
 
   // Format date nicely

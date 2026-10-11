@@ -5,12 +5,14 @@ import { exportData, importData, resetDatabase } from '../db/backup';
 import { seedDatabase } from '../db/seeds';
 import { changePassword } from '../services/authService';
 import { populateProgram } from '../services/programPopulator';
+import { syncService } from '../services/syncService';
 import Header from '../components/layout/Header';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
-import { Save, Download, Upload, RefreshCw, Info, Lock, BookOpen } from 'lucide-react';
+import { Save, Download, Upload, RefreshCw, Info, Lock, BookOpen, Cloud, CloudUpload, CloudDownload, CheckCircle, AlertCircle } from 'lucide-react';
 
 export default function SettingsPage() {
+
   const settings = useLiveQuery(() => db.settings.toCollection().first());
   const [teacherName, setTeacherName] = useState('');
   const [schoolName, setSchoolName] = useState('');
@@ -27,6 +29,35 @@ export default function SettingsPage() {
   // Program population state
   const [progLoading, setProgLoading] = useState(false);
   const [progMsg, setProgMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  // Cloud Sync state
+  const [cloudSyncing, setCloudSyncing] = useState(false);
+  const [cloudMsg, setCloudMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  const handlePushToCloud = async () => {
+    setCloudSyncing(true);
+    setCloudMsg(null);
+    const res = await syncService.pushAllToCloud();
+    setCloudSyncing(false);
+    if (res.success) {
+      setCloudMsg({ type: 'success', text: '✅ تم رفع جميع البيانات والحصص إلى السحابة بنجاح!' });
+    } else {
+      setCloudMsg({ type: 'error', text: res.error || 'حدث خطأ أثناء الرفع' });
+    }
+  };
+
+  const handlePullFromCloud = async () => {
+    setCloudSyncing(true);
+    setCloudMsg(null);
+    const res = await syncService.pullAllFromCloud();
+    setCloudSyncing(false);
+    if (res.success) {
+      setCloudMsg({ type: 'success', text: `✅ تم استيراد البيانات من السحابة بنجاح! (${res.count || 0} حصة)` });
+      setTimeout(() => window.location.reload(), 1500);
+    } else {
+      setCloudMsg({ type: 'error', text: res.error || 'حدث خطأ أثناء الجلب' });
+    }
+  };
 
   // Sync from DB
   if (settings && !initialized) {
@@ -192,9 +223,53 @@ export default function SettingsPage() {
         </Button>
       </Card>
 
+      {/* Cloud Sync (Supabase) */}
+      <Card className="mb-6 border-2 border-emerald-500/20 bg-emerald-50/10">
+        <div className="flex items-center gap-2 mb-2">
+          <Cloud className="text-emerald-600" size={22} />
+          <h2 className="text-lg font-bold text-emerald-950">☁️ المزامنة والحفظ السحابي (Supabase)</h2>
+        </div>
+        <p className="text-sm text-text-muted mb-4">
+          احفظ جميع الأقسام والحصص والتقارير في السحابة لحمايتها من الضياع والوصول إليها من أي هاتف أو حاسوب.
+        </p>
+
+        {cloudMsg && (
+          <div className={`p-3 rounded-xl mb-4 text-xs font-bold flex items-center gap-2 ${
+            cloudMsg.type === 'success'
+              ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
+              : 'bg-red-100 text-red-800 border border-red-200'
+          }`}>
+            {cloudMsg.type === 'success' ? <CheckCircle size={16} /> : <AlertCircle size={16} />}
+            <span>{cloudMsg.text}</span>
+          </div>
+        )}
+
+        <div className="flex flex-wrap gap-3">
+          <Button
+            onClick={handlePushToCloud}
+            disabled={cloudSyncing}
+            icon={<CloudUpload size={18} />}
+            className="bg-emerald-600 hover:bg-emerald-700 text-white"
+          >
+            {cloudSyncing ? 'جاري المزامنة...' : 'رفع كل البيانات إلى السحابة ⬆️'}
+          </Button>
+
+          <Button
+            variant="secondary"
+            onClick={handlePullFromCloud}
+            disabled={cloudSyncing}
+            icon={<CloudDownload size={18} />}
+            className="border-emerald-200 text-emerald-800 hover:bg-emerald-100"
+          >
+            {cloudSyncing ? 'جاري المزامنة...' : 'استيراد البيانات من السحابة ⬇️'}
+          </Button>
+        </div>
+      </Card>
+
       {/* Data management */}
       <Card className="mb-6">
-        <h2 className="text-lg font-bold mb-4">💾 إدارة البيانات</h2>
+        <h2 className="text-lg font-bold mb-4">💾 النسخ الاحتياطي المحلي</h2>
+
         <div className="space-y-3">
           <Button variant="secondary" onClick={handleExport} icon={<Download size={18} />} className="w-full sm:w-auto">
             تصدير البيانات (JSON)
