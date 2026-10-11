@@ -132,7 +132,7 @@ export default function VisitorSite() {
                 </span>
               </div>
               <div className="text-xs text-gray-500 font-medium">
-                الأستاذ مصطفى لعرعري • {settings?.schoolName || 'مؤسسة العمران'}
+                تأطير: الأستاذ مصطفى لعرعري
               </div>
             </div>
           </button>
@@ -519,7 +519,7 @@ export default function VisitorSite() {
                 </div>
               </div>
               <p className="text-sm text-gray-400 leading-relaxed">
-                ورشة المسرح المدرسي بمؤسسة العمران — فضاء للإبداع والتعبير الفني لتلاميذ التعليم الأولي والابتدائي والإعدادي.
+                ورشة المسرح المدرسي — فضاء للإبداع والتعبير الفني وصقل مواهب التلاميذ في التمثيل والإلقاء والتنشيط.
               </p>
             </div>
 
@@ -536,18 +536,18 @@ export default function VisitorSite() {
 
             {/* Contact */}
             <div>
-              <h3 className="font-bold mb-4">معلومات التواصل</h3>
+              <h3 className="font-bold mb-4">معلومات التأطير</h3>
               <ul className="space-y-3 text-sm text-gray-400">
                 <li className="flex items-center gap-2">
-                  <MapPin size={16} className="text-secondary shrink-0" />
-                  <span>مجموعة مدارس العمران — AL OUMRANE</span>
-                </li>
-                <li className="flex items-center gap-2">
                   <Users size={16} className="text-secondary shrink-0" />
-                  <span>تأطير: الأستاذ {settings?.teacherName || 'مصطفى لعرعري'}</span>
+                  <span>تأطير: الأستاذ مصطفى لعرعري</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <BookOpen size={16} className="text-secondary shrink-0" />
+                  <span>ورشة المسرح المدرسي والتربية الفنية</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Calendar size={16} className="text-secondary shrink-0" />
                   <span>السنة الدراسية 2026/2027</span>
                 </li>
               </ul>
@@ -555,7 +555,7 @@ export default function VisitorSite() {
           </div>
 
           <div className="border-t border-white/10 pt-6 text-center text-xs text-gray-500">
-            <p>© 2026/2027 ورشة المسرح المدرسي — {settings?.schoolName || 'مؤسسة العمران'}. جميع الحقوق محفوظة.</p>
+            <p>© 2026/2027 ورشة المسرح المدرسي. جميع الحقوق محفوظة.</p>
           </div>
         </div>
       </footer>
@@ -571,7 +571,7 @@ export default function VisitorSite() {
             onClick={(e) => e.stopPropagation()}
           >
             {/* Top Theatrical Velvet Banner */}
-            <div className="relative h-32 bg-gradient-to-b from-[#2d0707] via-primary-dark to-primary flex items-center justify-between px-5">
+            <div className="relative h-28 bg-gradient-to-b from-[#2d0707] via-primary-dark to-primary flex items-center justify-end px-5">
               <button
                 onClick={() => setShowBioModal(false)}
                 className="w-9 h-9 rounded-full bg-black/40 hover:bg-black/70 text-white flex items-center justify-center transition-all cursor-pointer shadow-lg"
@@ -579,17 +579,12 @@ export default function VisitorSite() {
               >
                 <X size={20} />
               </button>
-
-              <div className="inline-flex items-center gap-1.5 bg-amber-400/20 border border-amber-300/40 text-amber-300 text-xs font-black px-3.5 py-1.5 rounded-full shadow-inner">
-                <span>🎭</span>
-                <span>البطاقة التعريفية للمؤطر</span>
-              </div>
             </div>
 
             {/* Profile Content Body */}
             <div className="px-6 pb-6 pt-0 relative">
               {/* Centered Avatar with Golden Rings */}
-              <div className="flex justify-center -mt-16 mb-3">
+              <div className="flex justify-center -mt-14 mb-3">
                 <div className="relative inline-block">
                   <img
                     src="/laaraari (2).jpeg"
@@ -610,12 +605,9 @@ export default function VisitorSite() {
                 <h3 className="text-2xl md:text-3xl font-black text-[#7a1212] drop-shadow-xs tracking-tight">
                   الأستاذ مصطفى لعرعري
                 </h3>
-                <div className="inline-block bg-primary/10 text-primary border border-primary/20 text-xs md:text-sm font-black px-3.5 py-1 rounded-full">
+                <div className="inline-block bg-primary/10 text-primary border border-primary/20 text-xs md:text-sm font-black px-4 py-1 rounded-full">
                   🎭 مؤطر ورشة المسرح المدرسي ومنشط تربوي
                 </div>
-                <p className="text-xs text-gray-500 font-semibold block pt-0.5">
-                  {settings?.schoolName || 'مؤسسة العمران للتعليم الخصوصي'}
-                </p>
               </div>
 
               {/* Centered Theatrical Quote / Bio */}
@@ -630,23 +622,17 @@ export default function VisitorSite() {
                 </p>
               </div>
 
-              {/* Centered Badges */}
+              {/* Centered Badges - Only Direction and School Events Animation */}
               <div className="mb-5">
                 <div className="text-[11px] font-bold text-gray-500 mb-2 uppercase tracking-wider">
                   مجالات التأطير والتنشيط
                 </div>
-                <div className="flex flex-wrap items-center justify-center gap-1.5">
-                  <span className="text-xs bg-primary/10 text-primary border border-primary/20 font-bold px-3 py-1 rounded-full">
-                    🎭 التعبير المسرحي والإلقاء
+                <div className="flex flex-wrap items-center justify-center gap-2">
+                  <span className="text-xs md:text-sm bg-gradient-to-r from-amber-500/15 to-amber-600/10 text-amber-950 border border-amber-300 font-black px-4 py-1.5 rounded-full shadow-2xs">
+                    🎬 الإخراج المسرحي
                   </span>
-                  <span className="text-xs bg-amber-100 text-amber-900 border border-amber-300 font-bold px-3 py-1 rounded-full">
-                    🤝 التنشيط وبناء الثقة
-                  </span>
-                  <span className="text-xs bg-emerald-100 text-emerald-900 border border-emerald-300 font-bold px-3 py-1 rounded-full">
-                    🎬 الإخراج والعروض المدرسية
-                  </span>
-                  <span className="text-xs bg-purple-100 text-purple-900 border border-purple-300 font-bold px-3 py-1 rounded-full">
-                    🌟 صقل المواهب الواعدة
+                  <span className="text-xs md:text-sm bg-gradient-to-r from-primary/15 to-primary/10 text-primary-dark border border-primary/30 font-black px-4 py-1.5 rounded-full shadow-2xs">
+                    🎪 تنشيط الحفلات والتظاهرات المدرسية
                   </span>
                 </div>
               </div>
