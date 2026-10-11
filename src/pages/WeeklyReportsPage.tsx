@@ -173,7 +173,7 @@ export default function WeeklyReportsPage() {
 
   const handleSaveDailySession = async (sessionId: number) => {
     await db.sessions.update(sessionId, { ...form, status: 'completed' });
-    syncService.syncSession(sessionId);
+    await syncService.syncSession(sessionId);
     setSavedSessionId(sessionId);
     setTimeout(() => { setSavedSessionId(null); setEditingSessionId(null); }, 1500);
   };
@@ -200,7 +200,7 @@ export default function WeeklyReportsPage() {
         status: 'completed',
         sessionNumber: 0,
       });
-      syncService.syncSession(Number(newId));
+      await syncService.syncSession(Number(newId));
       setAddSaved(true);
       setTimeout(() => {
         setAddSaved(false);
@@ -251,7 +251,7 @@ export default function WeeklyReportsPage() {
           difficulties: reportReason,
         });
       }
-      syncService.syncSession(sessionId);
+      await syncService.syncSession(sessionId);
       setReportSaved(sessionId);
       setTimeout(() => {
         setReportSaved(null);
@@ -263,6 +263,7 @@ export default function WeeklyReportsPage() {
       setReportSaving(false);
     }
   };
+
 
 
 

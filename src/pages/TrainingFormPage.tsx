@@ -15,8 +15,11 @@ import Select from '../components/ui/Select';
 import MultiSelect from '../components/ui/MultiSelect';
 import StatusBadge from '../components/shared/StatusBadge';
 import { Save, ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
+import { syncService } from '../services/syncService';
+
 
 export default function TrainingFormPage() {
+
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const sessionId = Number(id);
@@ -63,9 +66,11 @@ export default function TrainingFormPage() {
 
   const handleSave = async () => {
     await db.sessions.update(sessionId, form);
+    await syncService.syncSession(sessionId);
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   };
+
 
   const set = (key: string, value: unknown) => setForm(prev => ({ ...prev, [key]: value }));
 

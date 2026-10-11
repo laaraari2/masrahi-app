@@ -206,12 +206,12 @@ export const syncService = {
   /**
    * رفع حصة أو تقرير محدد إلى السحابة مباشرة عند الحفظ
    */
-  async syncSession(sessionId: number): Promise<void> {
+  async syncSession(sessionId: number): Promise<{ success: boolean; error?: string }> {
     try {
       const s = await db.sessions.get(sessionId);
-      if (!s) return;
+      if (!s) return { success: false, error: 'Session not found' };
 
-      await supabase.from('sessions').upsert({
+      const { error } = await supabase.from('sessions').upsert({
         id: s.id,
         class_id: s.classId,
         session_number: s.sessionNumber || 1,
@@ -233,8 +233,18 @@ export const syncService = {
         is_holiday: s.isHoliday || false,
         holiday_name: s.holidayName || null,
       }, { onConflict: 'id' });
-    } catch (err) {
-      console.warn('Sync session to cloud failed (will sync later):', err);
+
+      if (error) {
+        console.error('Supabase syncSession error:', error);
+        return { success: false, error: error.message };
+      }
+
+      console.log(`✅ Session #${sessionId} synced to Supabase successfully.`);
+      return { success: true };
+    } catch (err: any) {
+      console.warn('Sync session to cloud failed:', err);
+      return { success: false, error: err.message };
     }
   }
 };
+
