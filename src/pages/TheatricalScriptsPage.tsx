@@ -256,7 +256,7 @@ export default function TheatricalScriptsPage({ isAdmin = false }: Props) {
             </div>
           </button>
 
-          {/* Tab 3: المستوى الرابع والخامس ابتدائي - محكمة الطبيعة */}
+          {/* Tab 3: المستوى الرابع ابتدائي - محكمة الطبيعة */}
           <button
             onClick={() => {
               setActiveTab('nature-court');
@@ -287,7 +287,7 @@ export default function TheatricalScriptsPage({ isAdmin = false }: Props) {
                       : 'bg-white/20 text-white'
                   }`}
                 >
-                  4/5 ابتدائي
+                  4 ابتدائي
                 </span>
               </div>
               <p
@@ -300,7 +300,7 @@ export default function TheatricalScriptsPage({ isAdmin = false }: Props) {
             </div>
           </button>
 
-          {/* Tab 3: جدار الصمت في ساحة المدرسة */}
+          {/* Tab 4: المستوى الخامس ابتدائي - جدار الصمت */}
           <button
             onClick={() => {
               setActiveTab('wall-of-silence');
@@ -331,7 +331,7 @@ export default function TheatricalScriptsPage({ isAdmin = false }: Props) {
                       : 'bg-white/20 text-white'
                   }`}
                 >
-                  4/5 ابتدائي
+                  5 ابتدائي
                 </span>
               </div>
               <p
@@ -344,7 +344,7 @@ export default function TheatricalScriptsPage({ isAdmin = false }: Props) {
             </div>
           </button>
 
-          {/* Tab 3: مسرحية: رجال في الشمس */}
+          {/* Tab 5: الإعدادي - رجال في الشمس */}
           <button
             onClick={() => {
               setActiveTab('men-in-sun');
